@@ -1,8 +1,14 @@
-import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 
-const API = axios.create({
-  baseURL: "http://localhost:8000",
-});
+// Password analyzer
+export const analyzePassword = async (password) => {
+  const response = await fetch(`${API_URL}/analyze-password`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ password }),
+  });
 
-export const analyzePassword = (password) =>
-  API.post("/analyze-password", { password });
+  return response.json();
+};

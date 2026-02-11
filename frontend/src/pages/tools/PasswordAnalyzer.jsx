@@ -6,14 +6,14 @@ export default function PasswordAnalyzer() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const strengthColor = {
-  "Very Strong": "text-green-400",
-  "Strong": "text-green-400",
-  "Medium": "text-yellow-400",
-  "Weak": "text-red-400",
-  "Very Weak": "text-red-400",
-};
 
+  const strengthColor = {
+    "Very Strong": "text-green-500 font-bold",
+    "Strong": "text-green-500 font-bold",
+    "Medium": "text-yellow-400 font-semibold",
+    "Weak": "text-red-500 font-semibold",
+    "Very Weak": "text-red-600 font-semibold",
+  };
 
   const handleAnalyzePassword = async () => {
     if (!password) return;
@@ -69,7 +69,7 @@ export default function PasswordAnalyzer() {
             <div className="mt-6 bg-slate-800 p-4 rounded-lg">
               <p className="text-lg">
                 <strong>Strength:</strong>{" "}
-                <span className={strengthColor[result.strength]}>
+                <span className={strengthColor[result.strength] || "text-red-500"}>
                   {result.strength}
                 </span>
               </p>
