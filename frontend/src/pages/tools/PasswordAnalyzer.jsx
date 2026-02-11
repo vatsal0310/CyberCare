@@ -23,10 +23,17 @@ export default function PasswordAnalyzer() {
     setResult(null);
 
     try {
-      const response = await analyzePasswordAPI(password);
-      setResult(response.data);
+      // API already returns JSON directly
+      const data = await analyzePasswordAPI(password);
+
+      setResult({
+        strength: data.strength,
+        score: data.score
+      });
+
     } catch (err) {
-      setError("Unable to analyze password. Please try again.");
+      console.error(err);
+      setError("Unable to analyze password. Server may be waking up (try again in 20 seconds).");
     } finally {
       setLoading(false);
     }
