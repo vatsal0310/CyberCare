@@ -28,3 +28,7 @@ def root():
 @app.post("/analyze-password")
 def analyze(req: PasswordRequest):
     return analyze_password(req.password)
+
+@app.get("/")
+def health():
+    return {"status": "running"}
