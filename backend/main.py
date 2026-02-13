@@ -22,9 +22,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ✅ Include Pentesting Router
-app.include_router(pentest_router, prefix="/pentest", tags=["Penetration Testing"])
-
 # -----------------------------
 # Existing Password Feature
 # -----------------------------
@@ -39,3 +36,6 @@ def root():
 @app.post("/analyze-password")
 def analyze(req: PasswordRequest):
     return analyze_password(req.password)
+
+# ✅ Include Pentesting Router
+app.include_router(pentest_router, prefix="/pentest", tags=["Penetration Testing"])
