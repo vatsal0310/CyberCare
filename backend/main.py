@@ -1,17 +1,16 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from PasswordChecker.password_checker import analyze_password
 from fastapi.middleware.cors import CORSMiddleware
+import joblib
 
-# ✅ Import penetration testing router
+from PasswordChecker.password_checker import analyze_password
 from Penetration_testing.features_pentesting.router import router as pentest_router
 
 app = FastAPI(title="CyberCare API")
 
-# ✅ CORS configuration (Production + Local)
+# ✅ CORS configuration
 origins = [
-    "https://cyber-care-xi.vercel.app",  # Your deployed frontend
-    "http://localhost:5173",            # Local React dev
+    "http://localhost:5173",
 ]
 
 app.add_middleware(
@@ -22,9 +21,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# -----------------------------
-# Existing Password Feature
-# -----------------------------
+# =====================================================
+# ---------------- Password Feature -------------------
+# =====================================================
 
 class PasswordRequest(BaseModel):
     password: str
@@ -37,5 +36,12 @@ def root():
 def analyze(req: PasswordRequest):
     return analyze_password(req.password)
 
-# ✅ Include Pentesting Router
-app.include_router(pentest_router, prefix="/pentest", tags=["Penetration Testing"])
+# =====================================================
+# ------------- Penetration Testing -------------------
+# =====================================================
+
+app.include_router(
+    pentest_router,
+    prefix="/pentest",
+    tags=["Penetration Testing"]
+)

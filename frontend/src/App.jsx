@@ -13,6 +13,9 @@ import DataBreach from "./pages/tools/DataBreach"
 import FakeWebsite from "./pages/tools/FakeWebsite"
 import CyberQuiz from "./pages/tools/CyberQuiz"
 
+// Technical Tools
+import PenetrationTesting from "./pages/tools/penetrationtesting.jsx"
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -29,6 +32,10 @@ export default function App() {
         <Route path="/tools/data-breach" element={<DataBreach />} />
         <Route path="/tools/fake-website" element={<FakeWebsite />} />
         <Route path="/tools/cyber-quiz" element={<CyberQuiz />} />
+        
+        {/* Technical Tools */}
+        <Route path="/tools/penetration-testing" element={<PenetrationTesting />} />
+        
       </Routes>
     </BrowserRouter>
   )
