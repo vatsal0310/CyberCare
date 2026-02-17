@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
+const BASE_URL = "http://127.0.0.1:8000";
 
 // Password analyzer
 export const analyzePassword = async (password) => {
@@ -6,7 +6,7 @@ export const analyzePassword = async (password) => {
   const timeout = setTimeout(() => controller.abort(), 15000); // allow Render cold start
 
   try {
-    const response = await fetch(`${API_URL}/analyze-password`, {
+    const response = await fetch(`${BASE_URL}/analyze-password`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
