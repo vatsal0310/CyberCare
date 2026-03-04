@@ -4,7 +4,7 @@ import {
   sslScan,
   headerScan,
   vulnScan,
-} from "../../api/pentestapi";
+} from "../../../api/pentestapi";
 
 const PenetrationTesting = () => {
   const [target, setTarget] = useState("");

@@ -24,13 +24,6 @@ export default function RegularUser() {
       {/* TOOLS GRID */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <ToolCard
-          icon={<Search />}
-          title="URL Safety Checker"
-          description="Check if a link is safe before clicking"
-          link="/tools/url-checker"
-        />
-
-        <ToolCard
           icon={<Lock />}
           title="Password Strength Analyzer"
           description="Test how strong your password is"
@@ -38,10 +31,10 @@ export default function RegularUser() {
         />
 
         <ToolCard
-          icon={<AlertTriangle />}
-          title="Scam & Phishing Awareness"
-          description="Learn to recognize online threats"
-          link="/tools/phishing-awareness"
+          icon={<Brain />}
+          title="Email Spam Detector"
+          description="Spam Detection"
+          link="/tools/spam-detection"
         />
 
         <ToolCard
@@ -52,17 +45,17 @@ export default function RegularUser() {
         />
 
         <ToolCard
+          icon={<AlertTriangle />}
+          title="Scam & Phishing Awareness"
+          description="Learn to recognize online threats"
+          link="/tools/phishing-awareness"
+        />
+
+        <ToolCard
           icon={<Shield />}
           title="Fake Website Detector"
           description="Verify website legitimacy"
           link="/tools/fake-website"
-        />
-
-        <ToolCard
-          icon={<Brain />}
-          title="Cyber Safety Quiz"
-          description="Test your cybersecurity knowledge"
-          link="/tools/cyber-quiz"
         />
       </div>
     </div>

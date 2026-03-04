@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { analyzePassword as analyzePasswordAPI } from "../../services/api";
+import { analyzePassword as analyzePasswordAPI } from "../../../services/api";
 
 export default function PasswordAnalyzer() {
   const [password, setPassword] = useState("");

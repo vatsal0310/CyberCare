@@ -4,7 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from PasswordChecker.password_checker import analyze_password
 from Penetration_testing.features_pentesting.router import router as pentest_router
-from breach.breach_router import router as breach_router   # ← ADD THIS
+from breach.breach_router import router as breach_router
+from Spam_detection.spam_router import router as spam_router
 
 app = FastAPI(title="CyberCare API")
 
@@ -59,4 +60,14 @@ app.include_router(
     breach_router,
     prefix="/breach",
     tags=["Data Breach Checker"]
+)
+
+# =====================================================
+# SPAM EMAIL DETECTION
+# =====================================================
+
+app.include_router(
+    spam_router,
+    prefix="/spam",
+    tags=["Spam Detection"]
 )

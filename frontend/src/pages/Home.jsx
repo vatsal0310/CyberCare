@@ -30,7 +30,6 @@ export default function Home() {
           title="I'm a Technical User"
           description="Access penetration testing tools and security labs."
           link="/technical-user"
-          highlight
         />
       </div>
 
