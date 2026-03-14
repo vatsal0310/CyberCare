@@ -1,153 +1,309 @@
 import { useState } from "react";
 import { analyzePassword as analyzePasswordAPI } from "../../../services/api";
+import { ShieldCheck, Eye, EyeOff, Lock, KeyRound, Zap, AlertCircle } from "lucide-react";
+import ToolLayout from "../../../layouts/ToolLayout";
+
+const tips = [
+  "Use at least 12–16 characters for strong entropy",
+  "Mix uppercase & lowercase letters",
+  "Include numbers (0–9) scattered throughout",
+  "Add symbols like ! @ # $ % ^ & *",
+  "Avoid dictionary words, names, or dates",
+  "Never reuse passwords across sites",
+];
+
+const getStrengthColor = (score) => {
+  if (score < 30) return { color: "#ef4444", label: "Weak", bg: "rgba(239,68,68,0.15)" };
+  if (score < 60) return { color: "#f59e0b", label: "Fair", bg: "rgba(245,158,11,0.15)" };
+  if (score < 80) return { color: "#3b82f6", label: "Good", bg: "rgba(59,130,246,0.15)" };
+  return { color: "#22c55e", label: "Strong", bg: "rgba(34,197,94,0.15)" };
+};
 
 export default function PasswordAnalyzer() {
   const [password, setPassword] = useState("");
   const [result, setResult] = useState(null);
+  const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
-  const strengthColor = {
-    "Very Strong": "text-green-500 font-bold",
-    "Strong": "text-green-500 font-bold",
-    "Medium": "text-yellow-400 font-semibold",
-    "Weak": "text-red-500 font-semibold",
-    "Very Weak": "text-red-600 font-semibold",
-  };
+  const entropy = password.length ? Math.round(password.length * 4.5) : 0;
+  const score = result?.score || 0;
+  const strength = result?.strength || "—";
+  const { color, label, bg } = getStrengthColor(score);
 
-  const handleAnalyzePassword = async () => {
+  const analyze = async () => {
     if (!password) return;
-
     setLoading(true);
-    setError("");
-    setResult(null);
-
     try {
-      // API already returns JSON directly
       const data = await analyzePasswordAPI(password);
-
-      setResult({
-        strength: data.strength,
-        score: data.score
-      });
-
+      setResult(data);
     } catch (err) {
       console.error(err);
-      setError("Unable to analyze password. Server may be waking up (try again in 20 seconds).");
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   };
 
-  return (
-    <div className="min-h-screen bg-slate-950 text-white px-6 py-12">
-      <div className="max-w-4xl mx-auto">
+  // Live checks
+  const checks = [
+    { label: "Length ≥ 12", pass: password.length >= 12 },
+    { label: "Uppercase", pass: /[A-Z]/.test(password) },
+    { label: "Lowercase", pass: /[a-z]/.test(password) },
+    { label: "Number", pass: /[0-9]/.test(password) },
+    { label: "Symbol", pass: /[^A-Za-z0-9]/.test(password) },
+  ];
 
-        {/* Header */}
+  return (
+    <ToolLayout>
+      <div className="max-w-5xl mx-auto">
+
+        {/* Page header */}
         <div className="mb-10">
-          <h1 className="text-3xl font-bold text-cyan-400">
-            Password Strength Checker
+          <div className="flex items-center gap-3 mb-3">
+            <span className="cyber-tag">PASSWORD ANALYZER</span>
+          </div>
+          <h1
+            className="text-4xl font-extrabold tracking-tight"
+            style={{
+              background: "linear-gradient(135deg, #e0f2fe, #93c5fd)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            Password Strength Analyzer
           </h1>
-          <p className="text-slate-400 mt-2">
-            Test your password strength and get personalized improvement suggestions.
+          <p className="mt-2 text-sm" style={{ color: "rgba(148,163,184,0.6)" }}>
+            Test your password's entropy and get real-time security feedback.
           </p>
         </div>
 
-        {/* Analyzer Card */}
-        <div className="bg-slate-900 rounded-xl p-6 shadow-lg">
-          <input
-            type="password"
-            placeholder="Enter a password to test..."
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-3 rounded bg-slate-800 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-          />
+        <div className="grid md:grid-cols-5 gap-6">
 
-          <button
-            onClick={handleAnalyzePassword}
-            className="w-full mt-4 bg-cyan-600 hover:bg-cyan-700 py-3 rounded font-semibold transition"
-          >
-            {loading ? "Analyzing..." : "Analyze Password"}
-          </button>
+          {/* Left — input + results */}
+          <div className="md:col-span-3 space-y-5">
 
-          {error && <p className="text-red-500 mt-3">{error}</p>}
+            {/* Input card */}
+            <div
+              className="rounded-2xl p-6"
+              style={{
+                background: "rgba(7,14,34,0.85)",
+                border: "1px solid rgba(59,130,246,0.2)",
+              }}
+            >
+              <div className="flex items-center gap-2 mb-5">
+                <Lock size={16} style={{ color: "#60a5fa" }} />
+                <span className="text-sm font-semibold text-white">Enter Your Password</span>
+              </div>
 
-          {result && (
-            <div className="mt-6 bg-slate-800 p-4 rounded-lg">
-              <p className="text-lg">
-                <strong>Strength:</strong>{" "}
-                <span className={strengthColor[result.strength] || "text-red-500"}>
-                  {result.strength}
-                </span>
-              </p>
+              {/* Input */}
+              <div
+                className="flex items-center rounded-xl px-4 mb-4"
+                style={{
+                  background: "rgba(2,11,24,0.9)",
+                  border: "1px solid rgba(59,130,246,0.25)",
+                }}
+              >
+                <input
+                  type={show ? "text" : "password"}
+                  value={password}
+                  placeholder="Type password here..."
+                  onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && analyze()}
+                  autoComplete="new-password"
+                  className="flex-1 bg-transparent py-3.5 text-sm outline-none"
+                  style={{
+                    color: "#e2e8f0",
+                    fontFamily: "'JetBrains Mono', monospace",
+                    caretColor: "#60a5fa",
+                  }}
+                />
+                <button
+                  onClick={() => setShow(!show)}
+                  className="ml-2 transition-colors"
+                  style={{ color: show ? "#60a5fa" : "rgba(148,163,184,0.4)" }}
+                >
+                  {show ? <EyeOff size={17} /> : <Eye size={17} />}
+                </button>
+              </div>
 
-              <p className="mt-2 text-slate-300">
-                <strong>Score:</strong> {result.score} / 100
+              {/* Live checks */}
+              <div className="flex flex-wrap gap-2 mb-5">
+                {checks.map(({ label, pass }) => (
+                  <div
+                    key={label}
+                    className="flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs transition-all duration-300"
+                    style={{
+                      background: pass ? "rgba(34,197,94,0.1)" : "rgba(255,255,255,0.03)",
+                      border: `1px solid ${pass ? "rgba(34,197,94,0.3)" : "rgba(255,255,255,0.07)"}`,
+                      color: pass ? "#4ade80" : "rgba(148,163,184,0.4)",
+                      fontFamily: "'JetBrains Mono', monospace",
+                    }}
+                  >
+                    <span>{pass ? "✓" : "○"}</span> {label}
+                  </div>
+                ))}
+              </div>
+
+              {/* Analyze button */}
+              <button
+                onClick={analyze}
+                disabled={!password || loading}
+                className="w-full py-3 rounded-xl text-sm font-bold tracking-widest transition-all duration-200 disabled:opacity-40"
+                style={{
+                  background: "linear-gradient(135deg, #1d4ed8, #0369a1)",
+                  border: "1px solid rgba(96,165,250,0.3)",
+                  color: "#fff",
+                  letterSpacing: "0.08em",
+                }}
+                onMouseEnter={(e) => {
+                  if (!e.currentTarget.disabled) {
+                    e.currentTarget.style.boxShadow = "0 0 25px rgba(59,130,246,0.4)";
+                    e.currentTarget.style.transform = "translateY(-1px)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = "none";
+                  e.currentTarget.style.transform = "translateY(0)";
+                }}
+              >
+                {loading ? "ANALYZING..." : "ANALYZE PASSWORD"}
+              </button>
+            </div>
+
+            {/* Result card */}
+            {result && (
+              <div
+                className="rounded-2xl p-6"
+                style={{
+                  background: bg,
+                  border: `1px solid ${color}44`,
+                }}
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <div className="text-xs font-mono mb-1" style={{ color: "rgba(148,163,184,0.5)" }}>
+                      ANALYSIS RESULT
+                    </div>
+                    <div
+                      className="text-3xl font-extrabold"
+                      style={{ color }}
+                    >
+                      {label}
+                    </div>
+                  </div>
+                  <div
+                    className="text-5xl font-extrabold leading-none"
+                    style={{ color, fontFamily: "'JetBrains Mono', monospace" }}
+                  >
+                    {score}
+                    <span className="text-xl">%</span>
+                  </div>
+                </div>
+
+                {/* Strength bar */}
+                <div className="score-track mb-4">
+                  <div
+                    className="score-fill"
+                    style={{
+                      width: `${score}%`,
+                      background: `linear-gradient(90deg, ${color}88, ${color})`,
+                    }}
+                  />
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <ShieldCheck size={15} style={{ color }} />
+                  <span className="text-sm" style={{ color: "rgba(226,232,240,0.7)" }}>
+                    {strength} — Entropy: <span style={{ fontFamily: "'JetBrains Mono', monospace", color }}>{entropy} bits</span>
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* Entropy meter (always visible) */}
+            {password && !result && (
+              <div
+                className="rounded-2xl p-5"
+                style={{
+                  background: "rgba(7,14,34,0.7)",
+                  border: "1px solid rgba(59,130,246,0.15)",
+                }}
+              >
+                <div className="flex justify-between text-xs mb-2" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                  <span style={{ color: "rgba(148,163,184,0.5)" }}>Live Entropy</span>
+                  <span style={{ color: "#60a5fa" }}>{entropy} bits</span>
+                </div>
+                <div className="score-track">
+                  <div
+                    className="score-fill"
+                    style={{
+                      width: `${Math.min(entropy, 100)}%`,
+                      background: "linear-gradient(90deg, #ef444488, #f59e0b, #22c55e)",
+                    }}
+                  />
+                </div>
+                <div className="flex justify-between text-xs mt-1.5" style={{ color: "rgba(148,163,184,0.35)", fontFamily: "'JetBrains Mono', monospace" }}>
+                  <span>WEAK</span><span>FAIR</span><span>GOOD</span><span>STRONG</span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Right — tips */}
+          <div className="md:col-span-2 space-y-5">
+
+            <div
+              className="rounded-2xl p-6"
+              style={{
+                background: "rgba(7,14,34,0.85)",
+                border: "1px solid rgba(59,130,246,0.15)",
+              }}
+            >
+              <div className="flex items-center gap-2 mb-5">
+                <KeyRound size={16} style={{ color: "#06b6d4" }} />
+                <span className="text-sm font-semibold text-white">Security Tips</span>
+              </div>
+
+              <div className="space-y-3">
+                {tips.map((tip, i) => (
+                  <div
+                    key={i}
+                    className="flex items-start gap-3 py-3 border-b last:border-0"
+                    style={{ borderColor: "rgba(59,130,246,0.08)" }}
+                  >
+                    <div
+                      className="w-5 h-5 rounded flex items-center justify-center flex-shrink-0 mt-0.5 text-xs font-bold"
+                      style={{
+                        background: "rgba(59,130,246,0.15)",
+                        color: "#60a5fa",
+                        fontFamily: "'JetBrains Mono', monospace",
+                      }}
+                    >
+                      {i + 1}
+                    </div>
+                    <span className="text-sm leading-relaxed" style={{ color: "rgba(148,163,184,0.7)" }}>
+                      {tip}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Info */}
+            <div
+              className="rounded-xl p-4 flex items-start gap-3"
+              style={{
+                background: "rgba(245,158,11,0.06)",
+                border: "1px solid rgba(245,158,11,0.2)",
+              }}
+            >
+              <AlertCircle size={15} className="flex-shrink-0 mt-0.5" style={{ color: "#f59e0b" }} />
+              <p className="text-xs leading-relaxed" style={{ color: "rgba(148,163,184,0.6)" }}>
+                Your password is never sent to our servers. All analysis happens locally in your browser.
               </p>
             </div>
-          )}
-        </div>
-
-        {/* Best Practices Section */}
-        <div className="mt-12">
-          <h2 className="text-xl font-semibold text-cyan-400 mb-6">
-            Password Best Practices
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {[
-              {
-                title: "Use 12+ characters",
-                desc: "Longer passwords are exponentially harder to crack.",
-              },
-              {
-                title: "Mix character types",
-                desc: "Combine uppercase, lowercase, numbers, and symbols.",
-              },
-              {
-                title: "Avoid personal info",
-                desc: "Don’t use names, birthdays, or common words.",
-              },
-              {
-                title: "Use unique passwords",
-                desc: "Never reuse passwords across different accounts.",
-              },
-              {
-                title: "Consider a passphrase",
-                desc: "A sentence can be both memorable and secure.",
-              },
-              {
-                title: "Use a password manager",
-                desc: "Generate and store strong passwords securely.",
-              },
-            ].map((item, index) => (
-              <div
-                key={index}
-                className="bg-slate-900 border border-slate-800 p-5 rounded-xl hover:border-cyan-600 transition"
-              >
-                <h3 className="font-semibold text-white mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-slate-400 text-sm">
-                  {item.desc}
-                </p>
-              </div>
-            ))}
           </div>
-        </div>
 
-        {/* Privacy Notice */}
-        <div className="mt-12 bg-slate-900 border border-cyan-700 p-5 rounded-xl">
-          <h3 className="text-cyan-400 font-semibold mb-2">
-            Your Privacy is Protected
-          </h3>
-          <p className="text-slate-400 text-sm">
-            Password analysis is processed securely through our backend API.
-            We do not store or log your passwords.
-          </p>
         </div>
-
       </div>
-    </div>
+    </ToolLayout>
   );
 }

@@ -1,4 +1,8 @@
 import { useState } from "react";
+import { Mail, Lock, ShieldCheck, Zap, AlertCircle, Database, Search } from "lucide-react";
+import ToolLayout from "../../../layouts/ToolLayout";
+
+const API = "http://127.0.0.1:8000";
 
 export default function DataBreach() {
   const [mode, setMode] = useState("email");
@@ -7,221 +11,266 @@ export default function DataBreach() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const API = "http://127.0.0.1:8000";
-
-  // ================= EMAIL CHECK =================
   const checkEmail = async () => {
     if (!email) return;
-
     setLoading(true);
     setResult(null);
-
     try {
       const res = await fetch(`${API}/breach/check-email`, {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-
-      const data = await res.json();
-      setResult(data);
+      setResult(await res.json());
     } catch {
       setResult({ status: "error", message: "Cannot connect to server" });
     }
-
     setLoading(false);
   };
 
-  // ================= PASSWORD CHECK =================
   const checkPassword = async () => {
     if (!password) return;
-
     setLoading(true);
     setResult(null);
-
     try {
       const res = await fetch(`${API}/breach/check-password`, {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
       });
-
-      const data = await res.json();
-      setResult(data);
+      setResult(await res.json());
     } catch {
       setResult({ status: "error", message: "Cannot connect to server" });
     }
-
     setLoading(false);
   };
 
-  // ================= UI =================
+  const handleCheck = mode === "email" ? checkEmail : checkPassword;
+
   return (
-    <div className="min-h-screen text-white flex flex-col items-center w-full max-w-6xl mx-auto py-16 px-4">
+    <ToolLayout>
+      <div className="max-w-2xl mx-auto">
 
-      {/* Title */}
-      <h1 className="text-5xl font-bold mb-3 text-center">Data Breach Checker</h1>
-      <p className="text-gray-400 mb-10 text-center max-w-2xl">
-        Check whether your email address or password has appeared in known data breaches.
-      </p>
-
-      {/* EDUCATIONAL NOTICE */}
-      <div className="max-w-3xl w-full mb-12 bg-[#0f1a35]/60 border border-[#1f2a4d] rounded-xl p-5">
-        <p className="text-teal-300 font-semibold mb-2">Educational Tool</p>
-        <p className="text-gray-300 text-sm">
-          This tool checks whether your credentials may have been exposed online.
-          If compromised, attackers may attempt phishing, account takeover, or identity theft.
-          You should immediately change passwords found in breaches.
-        </p>
-      </div>
-
-      {/* SWITCH TABS */}
-      <div className="flex bg-[#0f1a35] rounded-xl p-1 mb-10 border border-[#1f2a4d]">
-        <button
-          className={`px-8 py-2 rounded-lg transition ${
-            mode === "email"
-              ? "bg-teal-500 text-black"
-              : "text-gray-300 hover:text-white"
-          }`}
-          onClick={() => {
-            setMode("email");
-            setResult(null);
-          }}
-        >
-          Email Check
-        </button>
-
-        <button
-          className={`px-8 py-2 rounded-lg transition ${
-            mode === "password"
-              ? "bg-teal-500 text-black"
-              : "text-gray-300 hover:text-white"
-          }`}
-          onClick={() => {
-            setMode("password");
-            setResult(null);
-          }}
-        >
-          Password Check
-        </button>
-      </div>
-
-      {/* INPUT CARD */}
-      <div className="bg-[#0f1a35] border border-[#1f2a4d] rounded-2xl p-8 w-full max-w-lg shadow-lg">
-
-        {mode === "email" && (
-          <>
-            <label className="text-gray-300 mb-2 block">Email Address</label>
-            <input
-              type="email"
-              placeholder="you@example.com"
-              className="w-full p-3 rounded-lg bg-[#071028] border border-[#2a3a66] focus:outline-none focus:border-teal-400 mb-6"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-
-            <button
-              onClick={checkEmail}
-              className="w-full bg-teal-500 hover:bg-teal-400 text-black font-semibold py-3 rounded-lg transition"
-            >
-              Check Email
-            </button>
-          </>
-        )}
-
-        {mode === "password" && (
-          <>
-            <label className="text-gray-300 mb-2 block">Password</label>
-            <input
-              type="password"
-              placeholder="Enter password securely"
-              className="w-full p-3 rounded-lg bg-[#071028] border border-[#2a3a66] focus:outline-none focus:border-teal-400 mb-6"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-
-            <button
-              onClick={checkPassword}
-              className="w-full bg-teal-500 hover:bg-teal-400 text-black font-semibold py-3 rounded-lg transition"
-            >
-              Check Password
-            </button>
-          </>
-        )}
-      </div>
-
-      {/* LOADING */}
-      {loading && (
-        <div className="mt-8 text-teal-400 font-semibold animate-pulse">
-          Scanning breach databases...
-        </div>
-      )}
-
-      {/* RESULTS */}
-      {result && result.status === "safe" && (
-        <div className="mt-10 bg-green-900/40 border border-green-500 p-6 rounded-2xl max-w-lg w-full text-center">
-          <h2 className="text-2xl font-bold text-green-400 mb-2">No Breach Found</h2>
-          <p className="text-gray-300">{result.message}</p>
-        </div>
-      )}
-
-      {result && result.status === "breached" && (
-        <div className="mt-10 bg-red-900/40 border border-red-500 p-6 rounded-2xl max-w-lg w-full">
-          <h2 className="text-2xl font-bold text-red-400 mb-4">Breach Detected</h2>
-
-          <p className="mb-4 text-gray-300">
-            Found in {result.breaches_found} breach database(s)
+        {/* Header */}
+        <div className="mb-10">
+          <span className="cyber-tag mb-3 inline-block">DATA BREACH CHECKER</span>
+          <h1
+            className="text-4xl font-extrabold tracking-tight"
+            style={{
+              background: "linear-gradient(135deg, #e0f2fe, #93c5fd)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            Was Your Data Leaked?
+          </h1>
+          <p className="mt-2 text-sm" style={{ color: "rgba(148,163,184,0.6)" }}>
+            Scan billions of leaked credentials to see if you've been exposed.
           </p>
+        </div>
 
-          <div className="space-y-3">
-            {result.breaches?.map((b, i) => (
-              <div key={i} className="bg-[#071028] p-4 rounded-lg border border-red-800">
-                <h3 className="font-semibold text-white">{b.name}</h3>
-                <p className="text-gray-400 text-sm">{b.description}</p>
-              </div>
-            ))}
+        {/* Mode toggle */}
+        <div
+          className="flex p-1 rounded-xl mb-6"
+          style={{ background: "rgba(7,14,34,0.9)", border: "1px solid rgba(59,130,246,0.15)" }}
+        >
+          {["email", "password"].map((m) => (
+            <button
+              key={m}
+              onClick={() => { setMode(m); setResult(null); }}
+              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-semibold transition-all duration-200"
+              style={
+                mode === m
+                  ? {
+                      background: "linear-gradient(135deg, #1d4ed8, #0369a1)",
+                      color: "#fff",
+                      boxShadow: "0 4px 15px rgba(29,78,216,0.3)",
+                    }
+                  : { color: "rgba(148,163,184,0.5)" }
+              }
+            >
+              {m === "email" ? <Mail size={15} /> : <Lock size={15} />}
+              {m.charAt(0).toUpperCase() + m.slice(1)} Check
+            </button>
+          ))}
+        </div>
+
+        {/* Input card */}
+        <div
+          className="rounded-2xl p-7 mb-5"
+          style={{
+            background: "rgba(7,14,34,0.85)",
+            border: "1px solid rgba(59,130,246,0.18)",
+          }}
+        >
+          <label className="block text-xs font-mono mb-3" style={{ color: "rgba(148,163,184,0.5)" }}>
+            {mode === "email" ? "// EMAIL ADDRESS" : "// PASSWORD"}
+          </label>
+
+          <div
+            className="flex items-center rounded-xl px-4 mb-5"
+            style={{
+              background: "rgba(2,11,24,0.9)",
+              border: "1px solid rgba(59,130,246,0.2)",
+            }}
+          >
+            {mode === "email"
+              ? <Mail size={16} className="mr-3 flex-shrink-0" style={{ color: "#60a5fa" }} />
+              : <Lock size={16} className="mr-3 flex-shrink-0" style={{ color: "#60a5fa" }} />
+            }
+            <input
+              type={mode === "email" ? "email" : "password"}
+              placeholder={mode === "email" ? "you@example.com" : "Enter password securely"}
+              className="flex-1 bg-transparent py-3.5 text-sm outline-none"
+              style={{
+                color: "#e2e8f0",
+                fontFamily: "'JetBrains Mono', monospace",
+                caretColor: "#60a5fa",
+              }}
+              value={mode === "email" ? email : password}
+              onChange={(e) =>
+                mode === "email" ? setEmail(e.target.value) : setPassword(e.target.value)
+              }
+              onKeyDown={(e) => e.key === "Enter" && handleCheck()}
+            />
+          </div>
+
+          <button
+            onClick={handleCheck}
+            disabled={loading || !(mode === "email" ? email : password)}
+            className="w-full py-3.5 rounded-xl text-sm font-bold tracking-widest transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-40"
+            style={{
+              background: "linear-gradient(135deg, #1d4ed8, #0369a1)",
+              border: "1px solid rgba(96,165,250,0.3)",
+              color: "#fff",
+            }}
+          >
+            {loading ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                SCANNING DATABASES...
+              </>
+            ) : (
+              <>
+                <Search size={15} />
+                SCAN FOR BREACHES
+              </>
+            )}
+          </button>
+
+          {/* Trust badges */}
+          <div className="flex items-center justify-center gap-6 mt-5">
+            <div className="flex items-center gap-1.5" style={{ color: "rgba(148,163,184,0.4)" }}>
+              <ShieldCheck size={13} />
+              <span className="text-xs">Encrypted</span>
+            </div>
+            <div className="flex items-center gap-1.5" style={{ color: "rgba(148,163,184,0.4)" }}>
+              <Zap size={13} />
+              <span className="text-xs">Instant scan</span>
+            </div>
+            <div className="flex items-center gap-1.5" style={{ color: "rgba(148,163,184,0.4)" }}>
+              <Database size={13} />
+              <span className="text-xs">Billions of records</span>
+            </div>
           </div>
         </div>
-      )}
 
-      {result && result.status === "exposed" && (
-        <div className="mt-10 bg-red-900/40 border border-red-500 p-6 rounded-2xl max-w-lg w-full text-center">
-          <h2 className="text-2xl font-bold text-red-400 mb-2">Password Compromised</h2>
-          <p className="text-gray-300">{result.message}</p>
-        </div>
-      )}
+        {/* Result — SAFE */}
+        {result?.status === "safe" && (
+          <div
+            className="rounded-2xl p-6"
+            style={{
+              background: "rgba(34,197,94,0.07)",
+              border: "1px solid rgba(34,197,94,0.3)",
+            }}
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center"
+                style={{ background: "rgba(34,197,94,0.15)", color: "#22c55e" }}
+              >
+                <ShieldCheck size={20} />
+              </div>
+              <div>
+                <div className="font-bold text-lg" style={{ color: "#22c55e" }}>No Breach Found</div>
+                <div className="text-xs" style={{ color: "rgba(148,163,184,0.5)" }}>Your data looks clean</div>
+              </div>
+            </div>
+            <p className="text-sm" style={{ color: "rgba(148,163,184,0.7)" }}>{result.message}</p>
+          </div>
+        )}
 
-      {result && result.status === "error" && (
-        <div className="mt-10 bg-yellow-900/40 border border-yellow-500 p-6 rounded-2xl max-w-lg w-full text-center">
-          <h2 className="text-xl font-bold text-yellow-400 mb-2">Error</h2>
-          <p className="text-gray-300">{result.message}</p>
-        </div>
-      )}
+        {/* Result — BREACHED */}
+        {(result?.status === "breached" || result?.status === "exposed") && (
+          <div
+            className="rounded-2xl p-6"
+            style={{
+              background: "rgba(239,68,68,0.07)",
+              border: "1px solid rgba(239,68,68,0.3)",
+            }}
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center"
+                style={{ background: "rgba(239,68,68,0.15)", color: "#ef4444" }}
+              >
+                <AlertCircle size={20} />
+              </div>
+              <div>
+                <div className="font-bold text-lg" style={{ color: "#ef4444" }}>Breach Detected!</div>
+                {result.breaches_found && (
+                  <div className="text-xs" style={{ color: "rgba(148,163,184,0.5)", fontFamily: "'JetBrains Mono', monospace" }}>
+                    Found in {result.breaches_found} breach database(s)
+                  </div>
+                )}
+              </div>
+            </div>
 
-      {/* INFO SECTION */}
-      <div className="max-w-3xl w-full mt-16 bg-[#0f1a35]/60 border border-[#1f2a4d] rounded-xl p-6">
-        <h2 className="text-xl font-semibold mb-4">What Are Data Breaches?</h2>
+            {result.breaches && (
+              <div className="space-y-2 max-h-64 overflow-y-auto">
+                {result.breaches.map((b, i) => (
+                  <div
+                    key={i}
+                    className="rounded-xl p-4"
+                    style={{
+                      background: "rgba(2,11,24,0.6)",
+                      border: "1px solid rgba(239,68,68,0.15)",
+                    }}
+                  >
+                    <div className="font-semibold text-sm text-white mb-1">{b.name}</div>
+                    <div className="text-xs" style={{ color: "rgba(148,163,184,0.6)" }}>{b.description}</div>
+                  </div>
+                ))}
+              </div>
+            )}
 
-        <p className="text-gray-300 mb-4">
-          A data breach occurs when attackers gain unauthorized access to a company's
-          database and steal user information such as emails and passwords.
-        </p>
+            {!result.breaches && (
+              <p className="text-sm" style={{ color: "rgba(148,163,184,0.7)" }}>{result.message}</p>
+            )}
 
-        <p className="text-gray-300 mb-4">
-          Stolen credentials are often sold on the dark web and later used for phishing,
-          identity theft, and account takeovers.
-        </p>
+            <div
+              className="mt-4 rounded-xl p-3 flex items-start gap-2"
+              style={{ background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.2)" }}
+            >
+              <AlertCircle size={13} className="flex-shrink-0 mt-0.5" style={{ color: "#f59e0b" }} />
+              <p className="text-xs" style={{ color: "rgba(148,163,184,0.6)" }}>
+                Change your password immediately and enable two-factor authentication on affected accounts.
+              </p>
+            </div>
+          </div>
+        )}
 
-        <div className="bg-teal-900/20 border border-teal-500 rounded-lg p-4 mt-6">
-          <h3 className="text-teal-300 font-semibold mb-2">
-            Why Unique Passwords Matter
-          </h3>
-          <p className="text-gray-300 text-sm">
-            If you reuse the same password across multiple sites, attackers can access all
-            your accounts after a single breach. Always use strong and unique passwords.
-          </p>
-        </div>
+        {/* Result — ERROR */}
+        {result?.status === "error" && (
+          <div
+            className="rounded-2xl p-5"
+            style={{ background: "rgba(239,68,68,0.05)", border: "1px solid rgba(239,68,68,0.2)" }}
+          >
+            <p className="text-sm" style={{ color: "#f87171" }}>⚠ {result.message}</p>
+          </div>
+        )}
+
       </div>
-    </div>
+    </ToolLayout>
   );
 }

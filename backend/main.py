@@ -1,11 +1,16 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-
+from Fake_website.fake_website import router as website_router
 from PasswordChecker.password_checker import analyze_password
 from Penetration_testing.features_pentesting.router import router as pentest_router
 from breach.breach_router import router as breach_router
 from Spam_detection.spam_router import router as spam_router
+from quiz.quiz_api import router as quiz_router
+from fastapi import FastAPI
+from sms_spam.spam_sms_detection import sms_router
+from dotenv import load_dotenv
+load_dotenv()
 
 app = FastAPI(title="CyberCare API")
 
@@ -63,11 +68,34 @@ app.include_router(
 )
 
 # =====================================================
-# SPAM EMAIL DETECTION
+# SPAM EMAIL & SMS DETECTION
 # =====================================================
 
 app.include_router(
     spam_router,
     prefix="/spam",
     tags=["Spam Detection"]
+)
+
+app.include_router(
+    sms_router,
+    prefix="/sms_spam",
+    tags=["SMS Spam Detection"]
+)
+
+# =====================================================
+# AI CYBER QUIZ GENERATOR
+# =====================================================
+
+app.include_router(
+    quiz_router,
+    prefix="/quiz",
+    tags=["Cyber Security Quiz"]
+)
+
+
+app.include_router(
+    website_router, 
+    prefix="/website",
+    tags=["Fake Website Detector"]
 )

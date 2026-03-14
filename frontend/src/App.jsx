@@ -9,7 +9,8 @@ import TechnicalUser from "./pages/TechnicalUser"
 import PasswordAnalyzer from "./pages/tools/regular/PasswordAnalyzer"
 import PhishingAwareness from "./pages/tools/regular/PhishingAwareness.jsx"
 import DataBreach from "./pages/tools/regular/DataBreach"
-import FakeWebsite from "./pages/tools/regular/FakeWebsite.jsx"
+import Quiz from "./pages/tools/regular/Quiz.jsx"
+import FakeWebsiteDetector from "./pages/tools/regular/FakeWebsiteDetector";
 
 // Technical Tools
 import PenetrationTesting from "./pages/tools/technical/penetrationtesting.jsx"
@@ -28,8 +29,9 @@ export default function App() {
         <Route path="/tools/password-analyzer" element={<PasswordAnalyzer />} />
         <Route path="/tools/phishing-awareness" element={<PhishingAwareness />} />
         <Route path="/tools/data-breach" element={<DataBreach />} />
-        <Route path="/tools/fake-website" element={<FakeWebsite />} />
         <Route path="/tools/spam-detection" element={<SpamDetector />} />
+        <Route path="/tools/quiz" element={<Quiz />} />
+        <Route path="/tools/fake-website-detector" element={<FakeWebsiteDetector />} />
         
         {/* Technical Tools */}
         <Route path="/tools/penetration-testing" element={<PenetrationTesting />} />

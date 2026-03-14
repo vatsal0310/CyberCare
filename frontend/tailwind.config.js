@@ -3,6 +3,9 @@ export default {
   content: ["./index.html", "./src/**/*.{js,jsx}"],
   theme: {
     extend: {
+      fontFamily: {
+      sans: ['Inter', 'sans-serif'],
+      },
       colors: {
         bg: "#020817",
         card: "#020c1b",
