@@ -3,7 +3,6 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from Fake_website.fake_website import router as website_router
 from PasswordChecker.password_checker import analyze_password
-from Penetration_testing.features_pentesting.router import router as pentest_router
 from breach.breach_router import router as breach_router
 from Spam_detection.spam_router import router as spam_router
 from quiz.quiz_api import router as quiz_router
@@ -46,16 +45,6 @@ class PasswordRequest(BaseModel):
 @app.post("/analyze-password")
 def analyze(req: PasswordRequest):
     return analyze_password(req.password)
-
-# =====================================================
-# PENETRATION TESTING
-# =====================================================
-
-app.include_router(
-    pentest_router,
-    prefix="/pentest",
-    tags=["Penetration Testing"]
-)
 
 # =====================================================
 # DATA BREACH CHECKER (NEW FEATURE)
