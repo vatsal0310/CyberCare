@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar"
 import Home from "./pages/Home"
 import RegularUser from "./pages/RegularUser"
 import TechnicalUser from "./pages/TechnicalUser"
+import LoginPage from "./pages/LoginPage.jsx"
 
 // Regular User Tools
 import PasswordAnalyzer from "./pages/tools/regular/PasswordAnalyzer"
@@ -19,6 +20,7 @@ export default function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/regular-user" element={<RegularUser />} />
         <Route path="/technical-user" element={<TechnicalUser />} />
 

@@ -139,7 +139,7 @@ export default function Home() {
               onMouseLeave={e=>e.currentTarget.style.transform="translateY(0)"}>
               I'm a Regular User <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform"/>
             </button>
-            <button onClick={()=>navigate("/technical-user")}
+            <button onClick={()=>navigate("/login")}
               className="group flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-bold tracking-wide transition-all duration-200"
               style={{background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.12)",color:"rgba(203,213,225,.85)"}}
               onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(96,165,250,.4)";e.currentTarget.style.color="#fff";e.currentTarget.style.transform="translateY(-2px)"}}
@@ -216,7 +216,7 @@ export default function Home() {
             </div>
 
             {/* Technical */}
-            <div onClick={()=>navigate("/technical-user")}
+            <div onClick={()=>navigate("/login")}
               onMouseEnter={()=>setHoveredCard("tech")} onMouseLeave={()=>setHoveredCard(null)}
               className="group relative cursor-pointer rounded-2xl p-8 overflow-hidden transition-all duration-300"
               style={{
@@ -311,7 +311,7 @@ export default function Home() {
                 onMouseLeave={e=>{e.currentTarget.style.boxShadow="none";e.currentTarget.style.transform="translateY(0)"}}>
                 Get Started — It's Free
               </button>
-              <button onClick={()=>navigate("/technical-user")}
+              <button onClick={()=>navigate("/login")}
                 className="px-8 py-3.5 rounded-xl text-sm font-bold tracking-wide transition-all duration-200"
                 style={{background:"transparent",border:"1px solid rgba(255,255,255,.12)",color:"rgba(203,213,225,.7)"}}
                 onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(255,255,255,.3)";e.currentTarget.style.color="#fff"}}

@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from Fake_website.fake_website import router as website_router
@@ -34,6 +34,38 @@ app.add_middleware(
 @app.get("/")
 def root():
     return {"status": "CyberCare API running"}
+
+# =====================================================
+# TEMPORARY IN-MEMORY AUTH (For Testing Login Page)
+# =====================================================
+
+fake_users_db = {}
+
+class AuthRequest(BaseModel):
+    email: str
+    password: str
+    name: str = None  # Optional because Login doesn't send a name
+
+@app.post("/register")
+def register(request: AuthRequest):
+    if request.email in fake_users_db:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    
+    fake_users_db[request.email] = {
+        "name": request.name,
+        "password": request.password 
+    }
+    return {"message": f"Welcome to the team, {request.name}!", "status": "success"}
+
+@app.post("/login")
+def login(request: AuthRequest):
+    if request.email not in fake_users_db:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    if fake_users_db[request.email]["password"] != request.password:
+        raise HTTPException(status_code=401, detail="Incorrect password")
+    
+    return {"message": "Login successful! Access granted.", "token": "fake-jwt-token-123"}
 
 # =====================================================
 # PASSWORD STRENGTH ANALYSIS (AI MODEL)
