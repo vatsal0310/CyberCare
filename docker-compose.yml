@@ -1,0 +1,69 @@
+version: "3.9"
+
+services:
+
+  # ── Postgres 15 Alpine ─────────────────────────────────────────────
+  db:
+    image: postgres:15-alpine
+    container_name: cybercare-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: cybercare
+      POSTGRES_PASSWORD: cybercare123
+      POSTGRES_DB: cybercare
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cybercare"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - cybercare-net        # ← ADD THIS
+
+  # ── Kali Linux ────────────────────────────────────────────────────
+  cybercare-kali:
+    image: kalilinux/kali-rolling
+    container_name: cybercare-kali
+    restart: unless-stopped
+    entrypoint: >
+      sh -c "
+        apt-get update -qq &&
+        apt-get install -y -qq nmap nikto curl &&
+        echo 'Kali ready' &&
+        tail -f /dev/null
+      "
+    networks:
+      - cybercare-net
+
+  # ── Unified FastAPI Backend ────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cybercare-backend
+    restart: unless-stopped
+    environment:
+      PORT: 8000
+      DATABASE_URL: postgresql://cybercare:cybercare123@db:5432/cybercare
+      KALI_CONTAINER_NAME: cybercare-kali
+    ports:
+      - "8000:8000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      db:
+        condition: service_healthy
+      cybercare-kali:
+        condition: service_started
+    networks:
+      - cybercare-net
+
+networks:
+  cybercare-net:
+    driver: bridge
+
+volumes:
+  postgres_data:

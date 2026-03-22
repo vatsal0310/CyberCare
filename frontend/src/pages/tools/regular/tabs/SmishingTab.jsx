@@ -14,8 +14,8 @@ export default function SmishingTab() {
           <MessageSquare size={18} />
         </div>
         <div>
-          <h2 className="text-lg font-bold text-white">SMS Phishing (Smishing)</h2>
-          <p className="text-xs" style={{ color: "rgba(148,163,184,0.5)" }}>
+          <h2 className="text-lg font-bold theme-text">SMS Phishing (Smishing)</h2>
+          <p className="text-xs" style={{ color: "var(--text-muted)" }}>
             Scam text messages designed to steal your personal information.
           </p>
         </div>
@@ -25,12 +25,12 @@ export default function SmishingTab() {
       <div
         className="rounded-xl p-5 space-y-3"
         style={{
-          background: "rgba(2,11,24,0.6)",
+          background: "var(--bg-input)",
           border: "1px solid rgba(129,140,248,0.12)",
         }}
       >
-        <h3 className="text-sm font-semibold text-white">What is Smishing?</h3>
-        <p className="text-xs leading-relaxed" style={{ color: "rgba(148,163,184,0.65)" }}>
+        <h3 className="text-sm font-semibold theme-text">What is Smishing?</h3>
+        <p className="text-xs leading-relaxed" style={{ color: "var(--text-muted)" }}>
           Smishing (SMS + Phishing) is when scammers send fake text messages pretending
           to be your bank, delivery company, government, or mobile operator. They want
           you to click a link or call a number so they can steal your money or personal details.
@@ -61,7 +61,7 @@ export default function SmishingTab() {
             ].map((tip) => (
               <li key={tip} className="flex items-start gap-2">
                 <span style={{ color: "#a78bfa", flexShrink: 0, marginTop: 1 }}>›</span>
-                <span className="text-xs" style={{ color: "rgba(148,163,184,0.6)" }}>{tip}</span>
+                <span className="text-xs" style={{ color: "var(--text-muted)" }}>{tip}</span>
               </li>
             ))}
           </ul>
@@ -84,7 +84,7 @@ export default function SmishingTab() {
           <p
             className="text-xs leading-relaxed p-3 rounded-lg"
             style={{
-              color: "rgba(226,232,240,0.7)",
+              color: "var(--text-sub)",
               fontFamily: "'JetBrains Mono', monospace",
               background: "rgba(0,0,0,0.3)",
               borderLeft: "3px solid rgba(239,68,68,0.4)",
@@ -93,7 +93,7 @@ export default function SmishingTab() {
             "HDFC Bank: Your a/c has been temporarily blocked. Verify immediately at
             http://hdfc-secure-login.xyz or call 9876XXXXXX. Ignore at your own risk."
           </p>
-          <p className="text-xs mt-2" style={{ color: "rgba(148,163,184,0.45)" }}>
+          <p className="text-xs mt-2" style={{ color: "var(--text-muted)" }}>
             Real banks never send links like this. Always open your banking app directly.
           </p>
         </div>

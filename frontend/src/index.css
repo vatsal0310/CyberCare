@@ -2,6 +2,295 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ══════════════════════════════════════════
+   DARK THEME — default
+══════════════════════════════════════════ */
+:root,
+html.dark {
+  --bg:               #020817;
+  --bg-deep:          #020b18;
+  --bg-deeper:        #040d1f;
+  --bg-card:          rgba(7,14,34,0.85);
+  --bg-card-solid:    #07090f;
+  --bg-sidebar:       linear-gradient(180deg,#040d1f 0%,#060f24 60%,#040d1f 100%);
+  --bg-hero:          linear-gradient(180deg,#020b18 0%,#040d1f 50%,#020b18 100%);
+
+  --border:           rgba(59,130,246,0.10);
+  --border-hover:     rgba(59,130,246,0.35);
+  --border-sidebar:   rgba(56,189,248,0.10);
+  --border-navbar:    rgba(255,255,255,0.10);
+
+  --text:             #ffffff;
+  --text-sub:         rgba(148,163,184,0.70);
+  --text-muted:       rgba(148,163,184,0.45);
+  --text-faint:       rgba(100,116,139,0.50);
+
+  --accent:           #22d3ee;
+  --accent-blue:      #3b82f6;
+  --accent-rgb:       34,211,238;
+
+  --grid-line:        rgba(59,130,246,0.04);
+  --grid-line-sm:     rgba(56,189,248,0.03);
+  --glow-a:           rgba(29,78,216,0.15);
+  --glow-b:           rgba(14,116,144,0.12);
+
+  --input-bg:         rgba(255,255,255,0.04);
+  --input-border:     rgba(255,255,255,0.10);
+  --input-focus:      rgba(34,211,238,0.40);
+
+  --stat-bg:          rgba(7,14,34,0.70);
+  --footer-card-bg:   linear-gradient(135deg,rgba(29,78,216,0.08),rgba(14,116,144,0.06));
+  --footer-card-border: rgba(59,130,246,0.12);
+
+  --sidebar-nav-text:       rgba(148,163,184,0.60);
+  --sidebar-nav-text-hover: #cbd5e1;
+  --sidebar-nav-text-active:#f0f9ff;
+  --sidebar-desc-inactive:  rgba(100,116,139,0.50);
+  --sidebar-icon-inactive:  rgba(148,163,184,0.45);
+  --sidebar-hover-bg:       rgba(255,255,255,0.03);
+  --sidebar-status-bg:      linear-gradient(135deg,rgba(14,165,233,0.07),rgba(29,78,216,0.05));
+  --sidebar-status-border:  rgba(56,189,248,0.12);
+  --sidebar-status-text:    rgba(148,163,184,0.35);
+  --sidebar-brand-text-sub: rgba(148,163,184,0.40);
+  --sidebar-section-label:  rgba(56,189,248,0.45);
+}
+
+/* ══════════════════════════════════════════
+   LIGHT THEME
+══════════════════════════════════════════ */
+html.light {
+  --bg:               #eef5ff;
+  --bg-deep:          #e8f2fd;
+  --bg-deeper:        #ddeaf8;
+  --bg-card:          rgba(255,255,255,0.92);
+  --bg-card-solid:    #ffffff;
+  --bg-sidebar:       linear-gradient(180deg,#ddeaf8 0%,#e4eef9 60%,#ddeaf8 100%);
+  --bg-hero:          linear-gradient(180deg,#e8f2fd 0%,#ddeaf8 50%,#e8f2fd 100%);
+
+  --border:           rgba(14,116,144,0.14);
+  --border-hover:     rgba(14,116,144,0.40);
+  --border-sidebar:   rgba(14,116,144,0.15);
+  --border-navbar:    rgba(14,116,144,0.15);
+
+  --text:             #0c1a2e;
+  --text-sub:         rgba(30,58,100,0.75);
+  --text-muted:       rgba(30,58,100,0.55);
+  --text-faint:       rgba(30,58,100,0.38);
+
+  --accent:           #0284c7;
+  --accent-blue:      #0369a1;
+  --accent-rgb:       2,132,199;
+
+  --grid-line:        rgba(14,116,144,0.06);
+  --grid-line-sm:     rgba(14,116,144,0.05);
+  --glow-a:           rgba(14,116,144,0.10);
+  --glow-b:           rgba(2,132,199,0.08);
+
+  --input-bg:         rgba(255,255,255,0.80);
+  --input-border:     rgba(14,116,144,0.20);
+  --input-focus:      rgba(2,132,199,0.40);
+
+  --stat-bg:          rgba(255,255,255,0.80);
+  --footer-card-bg:   linear-gradient(135deg,rgba(2,132,199,0.08),rgba(14,116,144,0.05));
+  --footer-card-border: rgba(14,116,144,0.16);
+
+  --sidebar-nav-text:       rgba(30,58,100,0.65);
+  --sidebar-nav-text-hover: #0c1a2e;
+  --sidebar-nav-text-active:#031830;
+  --sidebar-desc-inactive:  rgba(30,58,100,0.40);
+  --sidebar-icon-inactive:  rgba(14,116,144,0.55);
+  --sidebar-hover-bg:       rgba(14,116,144,0.06);
+  --sidebar-status-bg:      linear-gradient(135deg,rgba(14,116,144,0.09),rgba(2,132,199,0.06));
+  --sidebar-status-border:  rgba(14,116,144,0.16);
+  --sidebar-status-text:    rgba(30,58,100,0.45);
+  --sidebar-brand-text-sub: rgba(30,58,100,0.45);
+  --sidebar-section-label:  rgba(2,132,199,0.60);
+}
+
+/* ══════════════════════════════════════════
+   BASE
+══════════════════════════════════════════ */
+html { transition: background-color 0.35s ease, color 0.35s ease; }
+
 body {
-  @apply bg-bg text-white;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.35s ease, color 0.35s ease;
+}
+
+/* ══════════════════════════════════════════
+   UTILITY CLASSES used across components
+══════════════════════════════════════════ */
+.theme-navbar {
+  background: var(--bg);
+  border-color: var(--border-navbar);
+  transition: background 0.35s ease, border-color 0.35s ease;
+}
+
+.theme-muted   { color: var(--text-muted); }
+.theme-sub     { color: var(--text-sub);   }
+.text-accent   { color: var(--accent);     }
+
+.theme-card {
+  background:   var(--bg-card);
+  border-color: var(--border);
+  color:        var(--text);
+  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.theme-card:hover { border-color: var(--border-hover); }
+
+.theme-page-bg {
+  background: var(--bg-hero);
+  transition: background 0.35s ease;
+}
+
+.theme-grid-bg {
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+.theme-grid-bg-sm {
+  background-image:
+    linear-gradient(var(--grid-line-sm) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line-sm) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.theme-input {
+  background:    var(--input-bg);
+  border-color:  var(--input-border);
+  color:         var(--text);
+  transition: background 0.3s, border-color 0.3s;
+}
+.theme-input:focus {
+  outline: none;
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.12);
+}
+.theme-input::placeholder { color: var(--text-muted); }
+
+.theme-stat-card {
+  background:   var(--stat-bg);
+  border-color: var(--border);
+  transition: background 0.35s, border-color 0.35s;
+}
+
+.theme-sidebar {
+  background: var(--bg-sidebar);
+  border-color: var(--border-sidebar);
+  transition: background 0.35s, border-color 0.35s;
+}
+
+.theme-main-area {
+  background: var(--bg);
+  transition: background 0.35s;
+}
+
+/* ══════════════════════════════════════════
+   EXTRA VARS used by tool pages
+══════════════════════════════════════════ */
+:root,
+html.dark {
+  --bg-input:         rgba(2,11,24,0.9);
+  --bg-card-faint:    rgba(7,14,34,0.5);
+  --bg-row:           rgba(255,255,255,0.025);
+  --border-row:       rgba(255,255,255,0.06);
+  --border-svg:       rgba(255,255,255,0.05);
+  --heading-from:     #e0f2fe;
+  --heading-to:       #93c5fd;
+  --sidebar-brand-gradient-from: #e0f2fe;
+  --sidebar-brand-gradient-to:   #7dd3fc;
+
+  /* score/progress track */
+  --track-bg:         rgba(255,255,255,0.06);
+}
+
+html.light {
+  --bg-input:         rgba(255,255,255,0.85);
+  --bg-card-faint:    rgba(255,255,255,0.6);
+  --bg-row:           rgba(14,116,144,0.04);
+  --border-row:       rgba(14,116,144,0.12);
+  --border-svg:       rgba(14,116,144,0.12);
+  --heading-from:     #0c1a2e;
+  --heading-to:       #0369a1;
+  --sidebar-brand-gradient-from: #0369a1;
+  --sidebar-brand-gradient-to:   #0284c7;
+
+  --track-bg:         rgba(14,116,144,0.1);
+}
+
+/* ── score-track used by Quiz and PasswordAnalyzer ── */
+.score-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--track-bg);
+  overflow: hidden;
+}
+.score-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.6s ease;
+}
+
+/* ── cyber-tag chip ── */
+.cyber-tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  padding: 3px 10px;
+  border-radius: 4px;
+  background: rgba(var(--accent-rgb), 0.10);
+  color: var(--accent);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+}
+
+/* ── slide-up animation for results ── */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.slide-up { animation: slideUp 0.4s ease forwards; }
+
+/* ── Sidebar brand "CYBERCARE" text ── */
+.sidebar-brand-text {
+  background: linear-gradient(90deg, #e0f2fe, #7dd3fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+html.light .sidebar-brand-text {
+  background: none;
+  -webkit-text-fill-color: #0369a1;
+  color: #0369a1;
+}
+
+/* ══════════════════════════════════════════
+   THEME-AWARE UTILITY CLASSES
+══════════════════════════════════════════ */
+
+/* Page/section headings — gradient in dark, solid dark in light */
+.theme-heading {
+  background: linear-gradient(135deg, var(--heading-from), var(--heading-to));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+html.light .theme-heading {
+  background: none;
+  -webkit-text-fill-color: var(--text);
+  color: var(--text);
+}
+
+/* Replaces Tailwind text-white — white in dark, near-black in light */
+.theme-text {
+  color: var(--text);
+}
+
+/* hover:text-white → hover makes text full --text color */
+.hover\:theme-text:hover {
+  color: var(--text);
 }

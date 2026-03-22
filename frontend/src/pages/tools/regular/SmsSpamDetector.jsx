@@ -6,14 +6,8 @@ import {
 } from "lucide-react";
 
 const EXAMPLES = [
-  {
-    label: "Bank Alert",
-    text: "URGENT: Your SBI account has been blocked. Verify now or lose access: http://sbi-secure-verify.tk/login",
-  },
-  {
-    label: "Prize Scam",
-    text: "Congratulations! You've won Rs.50,000 in our lucky draw. Call 9876543210 or click http://claim-prize.xyz to collect.",
-  },
+  { label: "Bank Alert", text: "URGENT: Your SBI account has been blocked. Verify now or lose access: http://sbi-secure-verify.tk/login" },
+  { label: "Prize Scam", text: "Congratulations! You've won Rs.50,000 in our lucky draw. Call 9876543210 or click http://claim-prize.xyz to collect." },
 ];
 
 export default function SmsSpamDetector() {
@@ -32,28 +26,19 @@ export default function SmsSpamDetector() {
   const handlePaste = async () => {
     try {
       const text = await navigator.clipboard.readText();
-      setSms(text);
-      setCharCount(text.length);
-      setResult(null);
+      setSms(text); setCharCount(text.length); setResult(null);
     } catch { /* permission denied */ }
   };
 
   const handleClear = () => {
-    setSms("");
-    setCharCount(0);
-    setResult(null);
-    setError(null);
+    setSms(""); setCharCount(0); setResult(null); setError(null);
   };
 
   const checkSms = async () => {
     if (!sms.trim()) return;
-    setLoading(true);
-    setResult(null);
-    setError(null);
+    setLoading(true); setResult(null); setError(null);
     try {
-      const res = await axios.post("http://localhost:8000/detect-sms-spam", {
-        message: sms,
-      });
+      const res = await axios.post("http://localhost:8000/detect-sms-spam", { message: sms });
       setResult(res.data.prediction);
     } catch {
       setError("Could not reach the server. Make sure the backend is running.");
@@ -68,22 +53,22 @@ export default function SmsSpamDetector() {
 
       {/* Input card */}
       <div
-        className="rounded-2xl p-5"
-        style={{ background: "rgba(2,11,24,0.7)", border: "1px solid rgba(129,140,248,0.15)" }}
+        className="rounded-2xl p-5 theme-card"
+        style={{ border: "1px solid rgba(129,140,248,0.2)" }}
       >
         {/* Label row */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <MessageSquare size={14} style={{ color: "#818cf8" }} />
-            <span className="text-sm font-semibold text-white">Paste SMS Message</span>
+            <span className="text-sm font-semibold theme-text">Paste SMS Message</span>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={handlePaste}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200"
-              style={{ background: "rgba(129,140,248,0.08)", border: "1px solid rgba(129,140,248,0.2)", color: "rgba(148,163,184,0.6)" }}
+              style={{ background: "rgba(129,140,248,0.08)", border: "1px solid rgba(129,140,248,0.2)", color: "var(--text-muted)" }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(129,140,248,0.5)"; e.currentTarget.style.color = "#c4b5fd"; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(129,140,248,0.2)"; e.currentTarget.style.color = "rgba(148,163,184,0.6)"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(129,140,248,0.2)"; e.currentTarget.style.color = "var(--text-muted)"; }}
             >
               <ClipboardPaste size={11} /> Paste
             </button>
@@ -108,22 +93,22 @@ export default function SmsSpamDetector() {
             onChange={handleChange}
             placeholder={"Paste suspicious SMS here...\n\ne.g. 'Your account is blocked. Click here to verify...'"}
             rows={6}
-            className="w-full rounded-xl px-4 py-3 text-sm resize-none outline-none transition-all duration-200"
+            className="w-full rounded-xl px-4 py-3 text-sm resize-none outline-none transition-all duration-200 theme-input"
             style={{
-              background: "rgba(2,11,24,0.9)",
-              border: `1px solid ${sms ? "rgba(129,140,248,0.35)" : "rgba(129,140,248,0.12)"}`,
-              color: "#e2e8f0",
+              background: "var(--bg-input)",
+              border: `1px solid ${sms ? "rgba(129,140,248,0.35)" : "rgba(129,140,248,0.15)"}`,
+              color: "var(--text)",
               fontFamily: "'JetBrains Mono', monospace",
               fontSize: "0.75rem",
               lineHeight: 1.7,
               caretColor: "#818cf8",
             }}
             onFocus={e => e.currentTarget.style.borderColor = "rgba(129,140,248,0.6)"}
-            onBlur={e => e.currentTarget.style.borderColor = sms ? "rgba(129,140,248,0.35)" : "rgba(129,140,248,0.12)"}
+            onBlur={e => e.currentTarget.style.borderColor = sms ? "rgba(129,140,248,0.35)" : "rgba(129,140,248,0.15)"}
           />
           <div
-            className="absolute bottom-2.5 right-3 text-xs"
-            style={{ fontFamily: "'JetBrains Mono', monospace", color: "rgba(148,163,184,0.25)" }}
+            className="absolute bottom-2.5 right-3 text-xs theme-muted"
+            style={{ fontFamily: "'JetBrains Mono', monospace" }}
           >
             {charCount} chars
           </div>
@@ -131,7 +116,7 @@ export default function SmsSpamDetector() {
 
         {/* Try examples */}
         <div className="mt-3 flex items-center gap-2 flex-wrap">
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.58rem", color: "rgba(148,163,184,0.3)", letterSpacing: "0.1em" }}>
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.58rem", color: "var(--text-faint)", letterSpacing: "0.1em" }}>
             TRY EXAMPLE:
           </span>
           {EXAMPLES.map((ex) => (
@@ -139,9 +124,9 @@ export default function SmsSpamDetector() {
               key={ex.label}
               onClick={() => { setSms(ex.text); setCharCount(ex.text.length); setResult(null); }}
               className="px-2.5 py-1 rounded-lg text-xs transition-all duration-150"
-              style={{ background: "rgba(129,140,248,0.07)", border: "1px solid rgba(129,140,248,0.15)", color: "rgba(148,163,184,0.5)", fontFamily: "'JetBrains Mono', monospace" }}
+              style={{ background: "rgba(129,140,248,0.07)", border: "1px solid rgba(129,140,248,0.15)", color: "var(--text-muted)", fontFamily: "'JetBrains Mono', monospace" }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(129,140,248,0.4)"; e.currentTarget.style.color = "#c4b5fd"; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(129,140,248,0.15)"; e.currentTarget.style.color = "rgba(148,163,184,0.5)"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(129,140,248,0.15)"; e.currentTarget.style.color = "var(--text-muted)"; }}
             >
               {ex.label}
             </button>
@@ -153,11 +138,7 @@ export default function SmsSpamDetector() {
           onClick={checkSms}
           disabled={!sms.trim() || loading}
           className="w-full mt-4 py-3 rounded-xl text-sm font-bold tracking-widest flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-40"
-          style={{
-            background: "linear-gradient(135deg, #4f46e5, #6d28d9)",
-            border: "1px solid rgba(129,140,248,0.3)",
-            color: "#fff",
-          }}
+          style={{ background: "linear-gradient(135deg, #4f46e5, #6d28d9)", border: "1px solid rgba(129,140,248,0.3)", color: "#fff" }}
           onMouseEnter={e => { if (!e.currentTarget.disabled) e.currentTarget.style.boxShadow = "0 0 24px rgba(129,140,248,0.4)"; }}
           onMouseLeave={e => { e.currentTarget.style.boxShadow = "none"; }}
         >
@@ -170,10 +151,7 @@ export default function SmsSpamDetector() {
 
       {/* Error */}
       {error && (
-        <div
-          className="rounded-xl p-4 flex items-center gap-3"
-          style={{ background: "rgba(239,68,68,0.07)", border: "1px solid rgba(239,68,68,0.25)" }}
-        >
+        <div className="rounded-xl p-4 flex items-center gap-3" style={{ background: "rgba(239,68,68,0.07)", border: "1px solid rgba(239,68,68,0.25)" }}>
           <AlertTriangle size={15} style={{ color: "#ef4444", flexShrink: 0 }} />
           <p className="text-xs" style={{ color: "#f87171" }}>{error}</p>
         </div>
@@ -203,7 +181,7 @@ export default function SmsSpamDetector() {
               <div className="font-extrabold text-lg" style={{ color: isSpam ? "#f87171" : "#4ade80" }}>
                 {isSpam ? "Spam SMS Detected!" : "Looks Legitimate"}
               </div>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.58rem", color: "rgba(148,163,184,0.4)" }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.58rem", color: "var(--text-muted)" }}>
                 {isSpam ? "ML MODEL FLAGGED THIS MESSAGE" : "ML MODEL CLEARED THIS MESSAGE"}
               </div>
             </div>
@@ -211,29 +189,22 @@ export default function SmsSpamDetector() {
 
           {/* Confidence bar */}
           <div className="mb-4">
-            <div
-              className="flex justify-between text-xs mb-1.5"
-              style={{ fontFamily: "'JetBrains Mono', monospace", color: "rgba(148,163,184,0.4)" }}
-            >
+            <div className="flex justify-between text-xs mb-1.5 theme-muted" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
               <span>CONFIDENCE</span>
-              <span style={{ color: isSpam ? "#f87171" : "#4ade80" }}>
-                {isSpam ? "HIGH RISK" : "LOW RISK"}
-              </span>
+              <span style={{ color: isSpam ? "#f87171" : "#4ade80" }}>{isSpam ? "HIGH RISK" : "LOW RISK"}</span>
             </div>
             <div className="score-track">
               <div
                 className="score-fill"
                 style={{
                   width: isSpam ? "88%" : "12%",
-                  background: isSpam
-                    ? "linear-gradient(90deg, #f97316, #ef4444)"
-                    : "linear-gradient(90deg, #22c55e88, #22c55e)",
+                  background: isSpam ? "linear-gradient(90deg, #f97316, #ef4444)" : "linear-gradient(90deg, #22c55e88, #22c55e)",
                 }}
               />
             </div>
           </div>
 
-          <p className="text-xs leading-relaxed mb-3" style={{ color: "rgba(148,163,184,0.7)" }}>
+          <p className="text-xs leading-relaxed mb-3 theme-sub">
             {isSpam
               ? "This SMS shows characteristics of a smishing attack. Do not click any links or call any numbers mentioned in this message."
               : "This message does not appear to be spam. Still be cautious — if it's unexpected, verify the sender before taking any action."}
@@ -247,7 +218,7 @@ export default function SmsSpamDetector() {
             }}
           >
             <Info size={12} className="flex-shrink-0 mt-0.5" style={{ color: isSpam ? "#f87171" : "#4ade80" }} />
-            <p className="text-xs" style={{ color: "rgba(148,163,184,0.6)" }}>
+            <p className="text-xs theme-muted">
               {isSpam
                 ? "Delete this message immediately. Report it to your mobile carrier by forwarding to 1909 (India) or your country's spam reporting number."
                 : "If you weren't expecting this message, contact the sender through their official website or app — not through the number in the SMS."}

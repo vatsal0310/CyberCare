@@ -3,10 +3,10 @@ import { Lock, ShieldAlert, Database, AlertTriangle, Brain, Shield, Activity, Us
 import ToolLayout from "../layouts/ToolLayout";
 
 const stats = [
-  { label: "Threats Detected", value: "2.4M+", icon: Shield, color: "#3b82f6" },
-  { label: "Users Protected", value: "180K+", icon: Users, color: "#06b6d4" },
-  { label: "Breach Checks", value: "940K+", icon: Activity, color: "#818cf8" },
-  { label: "Avg Response", value: "< 1s", icon: Zap, color: "#f59e0b" },
+  { label: "Threats Detected", value: "2.4M+", icon: Shield,   color: "#3b82f6" },
+  { label: "Users Protected",  value: "180K+", icon: Users,    color: "#06b6d4" },
+  { label: "Breach Checks",    value: "940K+", icon: Activity, color: "#818cf8" },
+  { label: "Avg Response",     value: "< 1s",  icon: Zap,      color: "#f59e0b" },
 ];
 
 const tools = [
@@ -59,36 +59,18 @@ export default function RegularUser() {
               className="h-px flex-1 max-w-16"
               style={{ background: "linear-gradient(90deg, rgba(59,130,246,0.5), transparent)" }}
             />
-            <span
-              style={{
-                fontFamily: "'JetBrains Mono', monospace",
-                fontSize: "0.65rem",
-                letterSpacing: "0.15em",
-                color: "rgba(59,130,246,0.7)",
-              }}
-            >
+            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.15em", color: "var(--accent-blue)", opacity: 0.7 }}>
               CYBERCARE // USER DASHBOARD
             </span>
           </div>
 
-          <h1
-            className="text-5xl font-extrabold mb-4 leading-tight tracking-tight"
-            style={{
-              background: "linear-gradient(135deg, #f0f9ff 0%, #93c5fd 50%, #22d3ee 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
+          <h1 className="text-5xl font-extrabold mb-4 leading-tight tracking-tight theme-heading">
             Stay Safe Online.
             <br />
             No Tech Skills Needed.
           </h1>
-          <p
-            className="text-lg max-w-xl leading-relaxed"
-            style={{ color: "rgba(148,163,184,0.7)" }}
-          >
-            Five powerful tools that protect your digital life — from passwords to
-            phishing — all in one place.
+          <p className="text-lg max-w-xl leading-relaxed" style={{ color: "var(--text-sub)" }}>
+            Five powerful tools that protect your digital life — from passwords to phishing — all in one place.
           </p>
         </div>
 
@@ -97,11 +79,8 @@ export default function RegularUser() {
           {stats.map(({ label, value, icon: Icon, color }) => (
             <div
               key={label}
-              className="rounded-xl p-4 flex items-center gap-3"
-              style={{
-                background: "rgba(7,14,34,0.7)",
-                border: "1px solid rgba(59,130,246,0.1)",
-              }}
+              className="rounded-xl p-4 flex items-center gap-3 theme-stat-card"
+              style={{ border: "1px solid var(--border)" }}
             >
               <div
                 className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
@@ -110,13 +89,10 @@ export default function RegularUser() {
                 <Icon size={16} />
               </div>
               <div>
-                <div className="text-lg font-extrabold text-white leading-none">{value}</div>
+                <div className="text-lg font-extrabold leading-none theme-text">{value}</div>
                 <div
-                  className="text-xs mt-0.5"
-                  style={{
-                    color: "rgba(148,163,184,0.5)",
-                    fontFamily: "'JetBrains Mono', monospace",
-                  }}
+                  className="text-xs mt-0.5 theme-muted"
+                  style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
                   {label}
                 </div>
@@ -128,23 +104,12 @@ export default function RegularUser() {
         {/* Section label */}
         <div className="flex items-center gap-4 mb-6">
           <span
-            style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: "0.65rem",
-              letterSpacing: "0.12em",
-              color: "rgba(148,163,184,0.4)",
-            }}
+            style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.12em", color: "var(--text-faint)" }}
           >
             // SELECT A TOOL
           </span>
-          <div
-            className="flex-1 h-px"
-            style={{ background: "rgba(59,130,246,0.1)" }}
-          />
-          <span
-            className="cyber-tag"
-            style={{ fontSize: "0.6rem" }}
-          >
+          <div className="flex-1 h-px" style={{ background: "var(--border)" }} />
+          <span className="cyber-tag" style={{ fontSize: "0.6rem" }}>
             {tools.length} TOOLS
           </span>
         </div>
@@ -159,10 +124,7 @@ export default function RegularUser() {
         {/* Footer note */}
         <div
           className="mt-12 rounded-2xl p-5 flex items-center gap-4"
-          style={{
-            background: "linear-gradient(135deg, rgba(29,78,216,0.08), rgba(14,116,144,0.06))",
-            border: "1px solid rgba(59,130,246,0.12)",
-          }}
+          style={{ background: "var(--footer-card-bg)", border: "1px solid var(--footer-card-border)" }}
         >
           <div
             className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
@@ -171,8 +133,8 @@ export default function RegularUser() {
             <Shield size={18} />
           </div>
           <div>
-            <div className="text-sm font-semibold text-white mb-0.5">Your privacy is guaranteed</div>
-            <div className="text-xs" style={{ color: "rgba(148,163,184,0.5)" }}>
+            <div className="text-sm font-semibold mb-0.5 theme-text">Your privacy is guaranteed</div>
+            <div className="text-xs theme-muted">
               We never store your passwords or emails. All checks happen securely without saving your data.
             </div>
           </div>

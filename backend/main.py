@@ -1,75 +1,63 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+load_dotenv()
+
+# ── Non-tech routers ──────────────────────────────────────────────────
 from Fake_website.fake_website import router as website_router
 from PasswordChecker.password_checker import analyze_password
 from breach.breach_router import router as breach_router
 from Spam_detection.spam_router import router as spam_router
 from quiz.quiz_api import router as quiz_router
-from fastapi import FastAPI
 from sms_spam.spam_sms_detection import sms_router
-from dotenv import load_dotenv
-load_dotenv()
+
+# ── Tech routers ──────────────────────────────────────────────────────
+from smart_vulnerability_analyzer.features_pentesting.router import router as pentest_router
+from smart_vulnerability_analyzer.features_pentesting.verification_router import router as verify_router
+from attack_graph.router import router as attack_graph_router
+from attack_graph.database import create_tables
 
 app = FastAPI(title="CyberCare API")
 
-# ================= CORS =================
-
-origins = [
-    "http://localhost:5173",
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["http://localhost:5173", "http://localhost:5174"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# =====================================================
-# ROOT
-# =====================================================
+@app.on_event("startup")
+def startup():
+    create_tables()  # creates attack graph tables on boot
 
 @app.get("/")
 def root():
     return {"status": "CyberCare API running"}
 
-# =====================================================
-# TEMPORARY IN-MEMORY AUTH (For Testing Login Page)
-# =====================================================
-
+# ── In-memory auth (non-tech users) ───────────────────────────────────
 fake_users_db = {}
 
 class AuthRequest(BaseModel):
     email: str
     password: str
-    name: str = None  # Optional because Login doesn't send a name
+    name: str = None
 
 @app.post("/register")
 def register(request: AuthRequest):
     if request.email in fake_users_db:
         raise HTTPException(status_code=400, detail="Email already registered")
-    
-    fake_users_db[request.email] = {
-        "name": request.name,
-        "password": request.password 
-    }
+    fake_users_db[request.email] = {"name": request.name, "password": request.password}
     return {"message": f"Welcome to the team, {request.name}!", "status": "success"}
 
 @app.post("/login")
 def login(request: AuthRequest):
     if request.email not in fake_users_db:
         raise HTTPException(status_code=404, detail="User not found")
-    
     if fake_users_db[request.email]["password"] != request.password:
         raise HTTPException(status_code=401, detail="Incorrect password")
-    
     return {"message": "Login successful! Access granted.", "token": "fake-jwt-token-123"}
-
-# =====================================================
-# PASSWORD STRENGTH ANALYSIS (AI MODEL)
-# =====================================================
 
 class PasswordRequest(BaseModel):
     password: str
@@ -78,45 +66,14 @@ class PasswordRequest(BaseModel):
 def analyze(req: PasswordRequest):
     return analyze_password(req.password)
 
-# =====================================================
-# DATA BREACH CHECKER (NEW FEATURE)
-# =====================================================
+# ── Non-tech routers ──────────────────────────────────────────────────
+app.include_router(breach_router,  prefix="/breach",   tags=["Data Breach Checker"])
+app.include_router(spam_router,    prefix="/spam",     tags=["Spam Detection"])
+app.include_router(sms_router,     prefix="/sms_spam", tags=["SMS Spam Detection"])
+app.include_router(quiz_router,    prefix="/quiz",     tags=["Cyber Security Quiz"])
+app.include_router(website_router, prefix="/website",  tags=["Fake Website Detector"])
 
-app.include_router(
-    breach_router,
-    prefix="/breach",
-    tags=["Data Breach Checker"]
-)
-
-# =====================================================
-# SPAM EMAIL & SMS DETECTION
-# =====================================================
-
-app.include_router(
-    spam_router,
-    prefix="/spam",
-    tags=["Spam Detection"]
-)
-
-app.include_router(
-    sms_router,
-    prefix="/sms_spam",
-    tags=["SMS Spam Detection"]
-)
-
-# =====================================================
-# AI CYBER QUIZ GENERATOR
-# =====================================================
-
-app.include_router(
-    quiz_router,
-    prefix="/quiz",
-    tags=["Cyber Security Quiz"]
-)
-
-
-app.include_router(
-    website_router, 
-    prefix="/website",
-    tags=["Fake Website Detector"]
-)
+# ── Tech routers ──────────────────────────────────────────────────────
+app.include_router(pentest_router)        # /pentest
+app.include_router(verify_router)         # /pentest/verify
+app.include_router(attack_graph_router)   # /attack-graph

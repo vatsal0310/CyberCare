@@ -7,30 +7,9 @@ import VishingTab from "./tabs/VishingTab"
 import { Mail, MessageSquare, Phone } from "lucide-react"
 
 const tabs = [
-  {
-    id: "phishing",
-    label: "Phishing",
-    icon: Mail,
-    tag: "EMAIL ATTACKS",
-    description: "Fake emails that steal your credentials",
-    color: "#3b82f6",
-  },
-  {
-    id: "smishing",
-    label: "Smishing",
-    icon: MessageSquare,
-    tag: "SMS ATTACKS",
-    description: "Fraudulent text messages with malicious links",
-    color: "#818cf8",
-  },
-  {
-    id: "vishing",
-    label: "Vishing",
-    icon: Phone,
-    tag: "VOICE ATTACKS",
-    description: "Phone call scams impersonating trusted entities",
-    color: "#06b6d4",
-  },
+  { id: "phishing", label: "Phishing", icon: Mail,          tag: "EMAIL ATTACKS", description: "Fake emails that steal your credentials",              color: "#3b82f6" },
+  { id: "smishing", label: "Smishing", icon: MessageSquare, tag: "SMS ATTACKS",   description: "Fraudulent text messages with malicious links",        color: "#818cf8" },
+  { id: "vishing",  label: "Vishing",  icon: Phone,         tag: "VOICE ATTACKS", description: "Phone call scams impersonating trusted entities",      color: "#06b6d4" },
 ]
 
 export default function PhishingAwareness() {
@@ -44,35 +23,28 @@ export default function PhishingAwareness() {
         {/* Header */}
         <div className="mb-10">
           <span className="cyber-tag mb-3 inline-block">PHISHING AWARENESS</span>
-          <h1
-            className="text-4xl font-extrabold tracking-tight"
-            style={{
-              background: "linear-gradient(135deg, #e0f2fe, #93c5fd)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
+          <h1 className="text-4xl font-extrabold tracking-tight theme-heading">
             Scam & Phishing Awareness
           </h1>
-          <p className="mt-2 text-sm" style={{ color: "rgba(148,163,184,0.6)" }}>
+          <p className="mt-2 text-sm theme-muted">
             Learn how attackers try to deceive you — and how to stay one step ahead.
           </p>
         </div>
 
-        {/* Tab selector cards — 3 cols */}
+        {/* Tab selector cards */}
         <div className="grid grid-cols-3 gap-4 mb-8">
           {tabs.map(({ id, label, icon: Icon, tag, description, color }) => (
             <button
               key={id}
               onClick={() => setActive(id)}
-              className="text-left rounded-2xl p-5 transition-all duration-200"
+              className="text-left rounded-2xl p-5 transition-all duration-200 theme-card"
               style={{
                 background: active === id
                   ? `linear-gradient(135deg, ${color}18, ${color}08)`
-                  : "rgba(7,14,34,0.7)",
+                  : "var(--bg-card)",
                 border: active === id
                   ? `1px solid ${color}55`
-                  : "1px solid rgba(59,130,246,0.12)",
+                  : "1px solid var(--border)",
                 boxShadow: active === id ? `0 8px 24px ${color}15` : "none",
                 transform: active === id ? "translateY(-2px)" : "none",
               }}
@@ -81,7 +53,7 @@ export default function PhishingAwareness() {
                 className="w-9 h-9 rounded-lg flex items-center justify-center mb-3"
                 style={{
                   background: `${color}20`,
-                  color: active === id ? color : "rgba(148,163,184,0.4)",
+                  color: active === id ? color : "var(--text-muted)",
                 }}
               >
                 <Icon size={17} />
@@ -89,15 +61,12 @@ export default function PhishingAwareness() {
 
               <div
                 className="font-bold text-sm mb-1"
-                style={{ color: active === id ? "#fff" : "rgba(148,163,184,0.6)" }}
+                style={{ color: active === id ? "var(--text)" : "var(--text-muted)" }}
               >
                 {label}
               </div>
 
-              <div
-                className="text-xs leading-relaxed"
-                style={{ color: "rgba(148,163,184,0.4)" }}
-              >
+              <div className="text-xs leading-relaxed theme-muted">
                 {description}
               </div>
 
@@ -128,15 +97,12 @@ export default function PhishingAwareness() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.3 }}
-            className="rounded-2xl p-7"
-            style={{
-              background: "rgba(7,14,34,0.85)",
-              border: `1px solid ${activeTab.color}25`,
-            }}
+            className="rounded-2xl p-7 theme-card"
+            style={{ border: `1px solid ${activeTab.color}25` }}
           >
             {active === "phishing" && <PhishingTab />}
             {active === "smishing" && <SmishingTab />}
-            {active === "vishing" && <VishingTab />}
+            {active === "vishing"  && <VishingTab />}
           </motion.div>
         </AnimatePresence>
 

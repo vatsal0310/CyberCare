@@ -63,8 +63,8 @@ export default function VishingTab() {
           <Phone size={18} />
         </div>
         <div>
-          <h2 className="text-lg font-bold text-white">Voice Phishing (Vishing)</h2>
-          <p className="text-xs" style={{ color: "rgba(148,163,184,0.5)" }}>
+          <h2 className="text-lg font-bold theme-text">Voice Phishing (Vishing)</h2>
+          <p className="text-xs" style={{ color: "var(--text-muted)" }}>
             Phone call scams that impersonate banks, police, and tech support.
           </p>
         </div>
@@ -74,18 +74,18 @@ export default function VishingTab() {
       <div
         className="rounded-xl p-5 space-y-3"
         style={{
-          background: "rgba(2,11,24,0.6)",
+          background: "var(--bg-input)",
           border: "1px solid rgba(6,182,212,0.12)",
         }}
       >
-        <h3 className="text-sm font-semibold text-white">What is Vishing?</h3>
-        <p className="text-xs leading-relaxed" style={{ color: "rgba(148,163,184,0.65)" }}>
+        <h3 className="text-sm font-semibold theme-text">What is Vishing?</h3>
+        <p className="text-xs leading-relaxed" style={{ color: "var(--text-muted)" }}>
           Vishing (Voice + Phishing) is when scammers call you on the phone pretending
           to be someone you trust — your bank, the police, a government agency, or a tech
           support team. They use fear, urgency, and authority to pressure you into
           giving away money or personal information before you have time to think clearly.
         </p>
-        <p className="text-xs leading-relaxed" style={{ color: "rgba(148,163,184,0.65)" }}>
+        <p className="text-xs leading-relaxed" style={{ color: "var(--text-muted)" }}>
           Modern vishing scams can even spoof caller ID to show a real bank phone number,
           making them very convincing. The best defence is always to hang up and call back
           on a number you look up yourself.
@@ -109,7 +109,7 @@ export default function VishingTab() {
             {WARNING_SIGNS.map((tip) => (
               <li key={tip} className="flex items-start gap-2">
                 <span style={{ color: "#06b6d4", flexShrink: 0, marginTop: 1 }}>›</span>
-                <span className="text-xs" style={{ color: "rgba(148,163,184,0.6)" }}>{tip}</span>
+                <span className="text-xs" style={{ color: "var(--text-muted)" }}>{tip}</span>
               </li>
             ))}
           </ul>
@@ -120,7 +120,7 @@ export default function VishingTab() {
       <div>
         <p
           className="text-xs font-semibold mb-3"
-          style={{ color: "rgba(148,163,184,0.4)", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em" }}
+          style={{ color: "var(--text-muted)", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em" }}
         >
           // REAL VISHING SCENARIOS
         </p>
@@ -153,19 +153,19 @@ export default function VishingTab() {
                 style={{
                   background: "rgba(0,0,0,0.35)",
                   borderLeft: `3px solid ${color}55`,
-                  color: "rgba(226,232,240,0.7)",
+                  color: "var(--text-sub)",
                   fontFamily: "'JetBrains Mono', monospace",
                   fontSize: "0.72rem",
                 }}
               >
-                <span style={{ color: "rgba(148,163,184,0.35)", fontSize: "0.6rem" }}>CALLER SAYS: </span><br />
+                <span style={{ color: "var(--text-muted)", fontSize: "0.6rem" }}>CALLER SAYS: </span><br />
                 {caller}
               </div>
 
               {/* What to do */}
               <div className="flex items-start gap-2">
                 <CheckCircle size={12} className="flex-shrink-0 mt-0.5" style={{ color: "#4ade80" }} />
-                <p className="text-xs" style={{ color: "rgba(148,163,184,0.6)" }}>
+                <p className="text-xs" style={{ color: "var(--text-muted)" }}>
                   <span style={{ color: "#4ade80", fontWeight: 600 }}>What to do: </span>
                   {tip}
                 </p>
@@ -179,13 +179,13 @@ export default function VishingTab() {
       <div
         className="rounded-xl p-5"
         style={{
-          background: "rgba(2,11,24,0.6)",
+          background: "var(--bg-input)",
           border: "1px solid rgba(6,182,212,0.1)",
         }}
       >
         <p
           className="text-xs font-semibold mb-4"
-          style={{ color: "rgba(148,163,184,0.4)", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em" }}
+          style={{ color: "var(--text-muted)", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em" }}
         >
           // DO'S &amp; DON'TS
         </p>
@@ -212,7 +212,7 @@ export default function VishingTab() {
               >
                 {type === "do" ? "✓" : "✗"}
               </div>
-              <span className="text-xs leading-relaxed" style={{ color: "rgba(148,163,184,0.65)" }}>
+              <span className="text-xs leading-relaxed" style={{ color: "var(--text-muted)" }}>
                 {text}
               </span>
             </div>
@@ -233,7 +233,7 @@ export default function VishingTab() {
           <p className="text-xs font-semibold mb-1" style={{ color: "#22d3ee" }}>
             The Golden Rule
           </p>
-          <p className="text-xs leading-relaxed" style={{ color: "rgba(148,163,184,0.6)" }}>
+          <p className="text-xs leading-relaxed" style={{ color: "var(--text-muted)" }}>
             No legitimate bank, government agency, or company will ever call you demanding
             immediate payment, an OTP, or remote access to your device. If you feel pressured
             — <span style={{ color: "#22d3ee" }}>hang up immediately</span> and call back on a number
