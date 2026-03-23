@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
-import ToolSidebar from "../components/ToolSideBar";
+import ToolSidebar from "../components/ToolSidebar";
 
 // Maps every /tools/* route to its readable page title
 const ROUTE_LABELS = {
