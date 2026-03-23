@@ -35,19 +35,30 @@ export default function TechDashboard() {
   const navigate = useNavigate();
   const [activeTool, setActiveTool] = useState(null);
 
+  // ── Real user from JWT stored in localStorage ──────────────
+  const user     = JSON.parse(localStorage.getItem("cybercare_user") || "{}");
+  const username = user.username || "Tech User";
+  const initials = username.slice(0, 2).toUpperCase();
+
   const handleLaunch = (id) => {
-    const internalRoutes = {
+    const routes = {
       vuln:     "/technical-user/vulnerability-analyzer",
       attack:   "/technical-user/attack-graph",
       soc:      "/technical-user/soc-lab",
       sqli:     "/technical-user/sqli-lab",
       pwdcrack: "/technical-user/password-lab",
     };
-    if (internalRoutes[id]) navigate(internalRoutes[id]);
+    if (routes[id]) navigate(routes[id]);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("cybercare_token");
+    localStorage.removeItem("cybercare_user");
+    navigate("/");
   };
 
   return (
-    <TechLayout activeTool={activeTool} onSelect={setActiveTool} onLogout={() => navigate("/")}>
+    <TechLayout activeTool={activeTool} onSelect={setActiveTool} onLogout={handleLogout}>
 
       {/* Top bar */}
       <div className="flex items-center justify-between mb-12">
@@ -64,21 +75,26 @@ export default function TechDashboard() {
         </div>
 
         <div className="flex items-center gap-4">
+          {/* User card with real name + initials from JWT */}
           <div
             className="flex items-center gap-3 px-4 py-2.5 rounded-xl theme-card"
             style={{ border: "1px solid var(--border)" }}
           >
             <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm"
-              style={{ background: "linear-gradient(135deg, #1d4ed8, #0ea5e9)", color: "#fff" }}
-            >TC</div>
+              className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0"
+              style={{ background: "linear-gradient(135deg, #1d4ed8, #0ea5e9)", color: "#fff", boxShadow: "0 0 12px rgba(29,78,216,0.4)" }}
+            >
+              {initials}
+            </div>
             <div>
-              <div className="text-sm font-semibold leading-none theme-text">Tech User</div>
+              <div className="text-sm font-semibold leading-none mb-0.5 theme-text">{username}</div>
               <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.6rem", color: "var(--accent)", opacity: 0.6 }}>// Security Researcher</div>
             </div>
           </div>
+
+          {/* Logout button */}
           <button
-            onClick={() => navigate("/")}
+            onClick={handleLogout}
             className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all duration-200"
             style={{ background: "rgba(255,56,96,0.08)", border: "1px solid rgba(255,56,96,0.25)", color: "rgba(255,100,120,0.85)", cursor: "pointer" }}
             onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,56,96,0.15)"; e.currentTarget.style.color = "#ff6480"; }}

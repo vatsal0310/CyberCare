@@ -21,7 +21,7 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - cybercare-net        # ← ADD THIS
+      - cybercare-net
 
   # ── Kali Linux ────────────────────────────────────────────────────
   cybercare-kali:
@@ -49,6 +49,9 @@ services:
       PORT: 8000
       DATABASE_URL: postgresql://cybercare:cybercare123@db:5432/cybercare
       KALI_CONTAINER_NAME: cybercare-kali
+      # Generate with: python -c "import secrets; print(secrets.token_hex(32))"
+      SECRET_KEY: e480d2405f8ccbc849281d3ca2c96da808cf9505a9d1f253bf414639f78048a2
+      ACCESS_TOKEN_EXPIRE_MINUTES: 180
     ports:
       - "8000:8000"
     volumes:

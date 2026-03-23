@@ -12,12 +12,12 @@ import Quiz from "./pages/tools/regular/Quiz.jsx"
 import FakeWebsiteDetector from "./pages/tools/regular/FakeWebsiteDetector"
 import SpamDetector from "./pages/tools/regular/EmailSpamDetector.jsx"
 
-// Tech user tools
+//Tech user tools
 import VulnerabilityAnalyzer from "./pages/tools/tech/VulnerabilityAnalyzer"
 import AttackGraph from "./pages/tools/tech/attack-graph/AttackGraph"
 
-// The Navbar is only shown on public pages (Home, Login).
-// All sidebar-based layouts (regular tools + tech portal) hide it.
+// Routes where the top Navbar should be hidden
+// (tech side has its own sidebar navigation)
 const HIDE_NAVBAR_ROUTES = ["/technical-user", "/regular-user", "/tools"]
 
 function AppContent() {
@@ -30,24 +30,22 @@ function AppContent() {
     <>
       {!hideNavbar && <Navbar />}
       <Routes>
-        <Route path="/"       element={<Home />} />
-        <Route path="/login"  element={<LoginPage />} />
-
-        {/* Regular user dashboard */}
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/regular-user" element={<RegularUser />} />
+        <Route path="/technical-user" element={<TechnicalUser />} />
 
         {/* Regular user tools */}
-        <Route path="/tools/password-analyzer"    element={<PasswordAnalyzer />} />
-        <Route path="/tools/phishing-awareness"   element={<PhishingAwareness />} />
-        <Route path="/tools/data-breach"          element={<DataBreach />} />
-        <Route path="/tools/spam-detection"       element={<SpamDetector />} />
-        <Route path="/tools/quiz"                 element={<Quiz />} />
+        <Route path="/tools/password-analyzer" element={<PasswordAnalyzer />} />
+        <Route path="/tools/phishing-awareness" element={<PhishingAwareness />} />
+        <Route path="/tools/data-breach" element={<DataBreach />} />
+        <Route path="/tools/spam-detection" element={<SpamDetector />} />
+        <Route path="/tools/quiz" element={<Quiz />} />
         <Route path="/tools/fake-website-detector" element={<FakeWebsiteDetector />} />
-
-        {/* Technical user dashboard + tools */}
-        <Route path="/technical-user"                          element={<TechnicalUser />} />
-        <Route path="/technical-user/vulnerability-analyzer"  element={<VulnerabilityAnalyzer />} />
-        <Route path="/technical-user/attack-graph"            element={<AttackGraph />} />
+        
+         {/* technical user tools */}
+        <Route path="/technical-user/vulnerability-analyzer" element={<VulnerabilityAnalyzer />} />
+        <Route path="/technical-user/attack-graph" element={<AttackGraph />} />
       </Routes>
     </>
   )
