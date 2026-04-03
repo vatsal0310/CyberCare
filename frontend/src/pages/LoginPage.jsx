@@ -52,7 +52,8 @@ export default function LoginPage() {
         if (response.ok) {
           localStorage.setItem("cybercare_token", data.access_token);
           localStorage.setItem("cybercare_user", JSON.stringify(data.user));
-          navigate("/technical-user");
+          // First-time or non-consented users must sign the Rules of Engagement
+          navigate(data.user.has_consented ? "/technical-user" : "/consent");
         } else {
           alert("❌ " + (data.detail || "Login failed"));
         }
@@ -69,7 +70,8 @@ export default function LoginPage() {
         if (response.ok) {
           localStorage.setItem("cybercare_token", data.access_token);
           localStorage.setItem("cybercare_user", JSON.stringify(data.user));
-          navigate("/technical-user");
+          // New accounts always need to sign the consent first
+          navigate(data.user.has_consented ? "/technical-user" : "/consent");
         } else {
           const msg = Array.isArray(data.detail)
             ? data.detail.map(e => e.msg).join(", ")

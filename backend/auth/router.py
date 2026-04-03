@@ -12,6 +12,16 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
+def _user_payload(user: User) -> dict:
+    """Shared helper — always include has_consented in user responses."""
+    return {
+        "id": user.id,
+        "email": user.email,
+        "username": user.username,
+        "has_consented": user.has_consented,
+    }
+
+
 # ── Login ─────────────────────────────────────────────────────
 @router.post("/login")
 def login(
@@ -26,11 +36,8 @@ def login(
     return {
         "access_token": access_token,
         "token_type": "bearer",
-        "user": {"id": user.id, "email": user.email, "username": user.username}
+        "user": _user_payload(user),
     }
-
-
-# ── Register ──────────────────────────────────────────────────
 class RegisterRequest(BaseModel):
     email: EmailStr
     username: str
@@ -71,15 +78,24 @@ def register(payload: RegisterRequest, db: Session = Depends(get_db)):
     return {
         "access_token": access_token,
         "token_type": "bearer",
-        "user": {"id": user.id, "email": user.email, "username": user.username}
+        "user": _user_payload(user),
     }
 
 
-# ── Get current user ──────────────────────────────────────────
+# ── Accept Consent ────────────────────────────────────────────
+@router.patch("/consent")
+def accept_consent(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Mark the authenticated user as having accepted the Rules of Engagement."""
+    if current_user.has_consented:
+        return {"detail": "Already consented", "user": _user_payload(current_user)}
+
+    current_user.has_consented = True
+    db.commit()
+    db.refresh(current_user)
+    return {"detail": "Consent recorded", "user": _user_payload(current_user)}
 @router.get("/me")
 def get_me(current_user: User = Depends(get_current_user)):
-    return {
-        "id": current_user.id,
-        "email": current_user.email,
-        "username": current_user.username,
-    }
+    return _user_payload(current_user)

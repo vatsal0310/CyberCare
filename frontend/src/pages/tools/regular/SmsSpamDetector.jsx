@@ -39,14 +39,14 @@ export default function SmsSpamDetector() {
     setLoading(true); setResult(null); setError(null);
     try {
       const res = await axios.post("http://localhost:8000/detect-sms-spam", { message: sms });
-      setResult(res.data.prediction);
+      setResult(res.data);  // store full response
     } catch {
       setError("Could not reach the server. Make sure the backend is running.");
     }
     setLoading(false);
   };
 
-  const isSpam = result === "Spam";
+  const isSpam = result?.prediction?.toUpperCase().startsWith("SPAM") ?? false;
 
   return (
     <div className="space-y-4">
@@ -191,13 +191,13 @@ export default function SmsSpamDetector() {
           <div className="mb-4">
             <div className="flex justify-between text-xs mb-1.5 theme-muted" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
               <span>CONFIDENCE</span>
-              <span style={{ color: isSpam ? "#f87171" : "#4ade80" }}>{isSpam ? "HIGH RISK" : "LOW RISK"}</span>
+              <span style={{ color: isSpam ? "#f87171" : "#4ade80" }}>{result?.confidence_label ?? (isSpam ? "HIGH RISK" : "LOW RISK")}</span>
             </div>
             <div className="score-track">
               <div
                 className="score-fill"
                 style={{
-                  width: isSpam ? "88%" : "12%",
+                  width: `${Math.round((result?.spam_probability ?? (isSpam ? 0.88 : 0.12)) * 100)}%`,
                   background: isSpam ? "linear-gradient(90deg, #f97316, #ef4444)" : "linear-gradient(90deg, #22c55e88, #22c55e)",
                 }}
               />

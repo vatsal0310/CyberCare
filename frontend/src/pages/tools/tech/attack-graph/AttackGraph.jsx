@@ -104,7 +104,12 @@ export default function AttackGraph() {
 
   // ── Landing / Create ────────────────────────────────────────────────────────
   if (view === "landing" || view === "create") return (
-    <TechLayout activeTool="attack" onSelect={(id) => id ? navigate(`/technical-user/${id}`) : navigate("/technical-user")} onLogout={() => navigate("/")}>
+    <TechLayout
+      activeTool="attack"
+      onSelect={(id) => id ? navigate(`/technical-user/${id}`) : navigate("/technical-user")}
+      onLogout={() => navigate("/")}
+      breadcrumb="Attack Graph Engine"
+    >
       {showScenarios && <ScenariosModal />}
       {confirmDelete  && <ConfirmModal />}
 
@@ -117,7 +122,6 @@ export default function AttackGraph() {
             <span style={{ color: "var(--accent)", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, fontFamily: FONT }}>SECURITY ARCHITECTURE TOOL</span>
           </div>
 
-          {/* Heading — uses theme-heading class so it works in both themes */}
           <h1 className="theme-heading" style={{ fontSize: 32, fontWeight: 800, margin: "0 0 10px", lineHeight: 1.2 }}>
             Design Your System.
           </h1>
@@ -162,11 +166,7 @@ export default function AttackGraph() {
         {/* Feature cards */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
           {FEATURES.map((f, i) => (
-            <div
-              key={i}
-              className="theme-card"
-              style={{ border: "1px solid var(--border)", borderRadius: 12, padding: 20 }}
-            >
+            <div key={i} className="theme-card" style={{ border: "1px solid var(--border)", borderRadius: 12, padding: 20 }}>
               <div style={{ fontSize: 24, marginBottom: 8 }}>{f.icon}</div>
               <div style={{ color: "var(--text)", fontWeight: 600, fontSize: 13, marginBottom: 6 }}>{f.title}</div>
               <div style={{ color: "var(--text-muted)", fontSize: 12, lineHeight: 1.6 }}>{f.desc}</div>
@@ -179,7 +179,12 @@ export default function AttackGraph() {
 
   // ── Canvas View ─────────────────────────────────────────────────────────────
   return (
-    <TechLayout activeTool="attack" onSelect={(id) => id ? navigate(`/technical-user/${id}`) : navigate("/technical-user")} onLogout={() => navigate("/")}>
+    <TechLayout
+      activeTool="attack"
+      onSelect={(id) => id ? navigate(`/technical-user/${id}`) : navigate("/technical-user")}
+      onLogout={() => navigate("/")}
+      breadcrumb="Attack Graph Engine"
+    >
       {showScenarios && <ScenariosModal />}
       {confirmDelete  && <ConfirmModal />}
 

@@ -1,9 +1,24 @@
-import { Link } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useTheme } from "../context/ThemeContext"
 import { Sun, Moon } from "lucide-react"
 
 export default function Navbar() {
   const { isDark, toggle } = useTheme()
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const scrollToSection = (id) => {
+    if (location.pathname !== "/") {
+      navigate("/")
+      setTimeout(() => {
+        const el = document.getElementById(id)
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" })
+      }, 120)
+    } else {
+      const el = document.getElementById(id)
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" })
+    }
+  }
 
   return (
     <nav className="flex justify-between items-center px-10 py-5 border-b theme-navbar">
@@ -19,10 +34,18 @@ export default function Navbar() {
       </Link>
 
       <div className="flex items-center gap-6 text-sm theme-muted">
-        <span className="hover:text-accent transition cursor-pointer">Features</span>
-        <span className="hover:text-accent transition cursor-pointer">About</span>
-        <span className="hover:text-accent transition cursor-pointer">Legal</span>
-        <span className="hover:text-accent transition cursor-pointer">Contact</span>
+        <button onClick={() => scrollToSection("features")}
+          className="hover:text-accent transition cursor-pointer bg-transparent border-none outline-none"
+          style={{ color: "inherit", font: "inherit" }}>Features</button>
+        <button onClick={() => scrollToSection("about")}
+          className="hover:text-accent transition cursor-pointer bg-transparent border-none outline-none"
+          style={{ color: "inherit", font: "inherit" }}>About</button>
+        <button onClick={() => scrollToSection("legal")}
+          className="hover:text-accent transition cursor-pointer bg-transparent border-none outline-none"
+          style={{ color: "inherit", font: "inherit" }}>Legal</button>
+        <button onClick={() => scrollToSection("contact")}
+          className="hover:text-accent transition cursor-pointer bg-transparent border-none outline-none"
+          style={{ color: "inherit", font: "inherit" }}>Contact</button>
 
         {/* Theme Toggle */}
         <button

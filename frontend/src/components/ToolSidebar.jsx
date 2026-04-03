@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { KeyRound, Globe, ShieldAlert, AlertTriangle, Brain, Shield, LayoutDashboard, Sun, Moon } from "lucide-react";
+import { KeyRound, Globe, ShieldAlert, AlertTriangle, Brain, Shield, LayoutDashboard, Sun, Moon, Cpu } from "lucide-react";
 import { useState } from "react";
 import { useTheme } from "../context/ThemeContext";
 
@@ -16,6 +16,9 @@ export default function ToolSidebar() {
   const [dashboardHovered, setDashboardHovered] = useState(false);
   const navigate = useNavigate();
   const { isDark, toggle } = useTheme();
+
+  // Show "Switch to Tech View" only if the user has a valid tech session
+  const isTechUser = Boolean(localStorage.getItem("cybercare_token"));
 
   return (
     <aside
@@ -200,6 +203,49 @@ export default function ToolSidebar() {
             )}
           </NavLink>
         ))}
+
+        {/* Divider */}
+        {isTechUser && (
+          <div className="pt-2 pb-1 px-1">
+            <div className="h-px" style={{ background: "var(--border-sidebar)" }} />
+          </div>
+        )}
+
+        {/* Switch to Tech View — right in the nav list, only for tech users */}
+        {isTechUser && (
+          <div
+            onClick={() => navigate("/technical-user")}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = "rgba(129,140,248,0.10)";
+              e.currentTarget.style.borderColor = "rgba(129,140,248,0.30)";
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = "rgba(129,140,248,0.05)";
+              e.currentTarget.style.borderColor = "rgba(129,140,248,0.18)";
+            }}
+            className="relative flex items-center gap-3 px-3 py-3 rounded-xl cursor-pointer transition-all duration-200"
+            style={{
+              background: "rgba(129,140,248,0.05)",
+              border: "1px solid rgba(129,140,248,0.18)",
+            }}
+          >
+            <div
+              className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+              style={{ background: "rgba(129,140,248,0.12)", color: "#818cf8" }}
+            >
+              <Cpu size={15} />
+            </div>
+            <div className="min-w-0">
+              <div className="text-sm font-semibold leading-none mb-0.5" style={{ color: "#818cf8" }}>
+                Tech View
+              </div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: "0.62rem", color: "rgba(129,140,248,0.55)" }}>
+                Switch to advanced tools
+              </div>
+            </div>
+            <div className="ml-auto" style={{ color: "rgba(129,140,248,0.55)", fontSize: 14 }}>→</div>
+          </div>
+        )}
       </nav>
 
       {/* ── Footer status card ── */}

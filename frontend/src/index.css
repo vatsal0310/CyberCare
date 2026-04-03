@@ -21,9 +21,9 @@ html.dark {
   --border-navbar:    rgba(255,255,255,0.10);
 
   --text:             #ffffff;
-  --text-sub:         rgba(148,163,184,0.70);
-  --text-muted:       rgba(148,163,184,0.45);
-  --text-faint:       rgba(100,116,139,0.50);
+  --text-sub:         rgba(203,213,225,0.90);
+  --text-muted:       rgba(186,200,220,0.80);
+  --text-faint:       rgba(148,163,184,0.70);
 
   --accent:           #22d3ee;
   --accent-blue:      #3b82f6;
@@ -42,17 +42,17 @@ html.dark {
   --footer-card-bg:   linear-gradient(135deg,rgba(29,78,216,0.08),rgba(14,116,144,0.06));
   --footer-card-border: rgba(59,130,246,0.12);
 
-  --sidebar-nav-text:       rgba(148,163,184,0.60);
-  --sidebar-nav-text-hover: #cbd5e1;
+  --sidebar-nav-text:       rgba(186,200,220,0.80);
+  --sidebar-nav-text-hover: #e2e8f0;
   --sidebar-nav-text-active:#f0f9ff;
-  --sidebar-desc-inactive:  rgba(100,116,139,0.50);
-  --sidebar-icon-inactive:  rgba(148,163,184,0.45);
+  --sidebar-desc-inactive:  rgba(148,163,184,0.70);
+  --sidebar-icon-inactive:  rgba(186,200,220,0.65);
   --sidebar-hover-bg:       rgba(255,255,255,0.03);
   --sidebar-status-bg:      linear-gradient(135deg,rgba(14,165,233,0.07),rgba(29,78,216,0.05));
   --sidebar-status-border:  rgba(56,189,248,0.12);
-  --sidebar-status-text:    rgba(148,163,184,0.35);
-  --sidebar-brand-text-sub: rgba(148,163,184,0.40);
-  --sidebar-section-label:  rgba(56,189,248,0.45);
+  --sidebar-status-text:    rgba(186,200,220,0.65);
+  --sidebar-brand-text-sub: rgba(186,200,220,0.60);
+  --sidebar-section-label:  rgba(56,189,248,0.65);
 }
 
 /* ══════════════════════════════════════════
@@ -73,9 +73,9 @@ html.light {
   --border-navbar:    rgba(14,116,144,0.15);
 
   --text:             #0c1a2e;
-  --text-sub:         rgba(30,58,100,0.75);
-  --text-muted:       rgba(30,58,100,0.55);
-  --text-faint:       rgba(30,58,100,0.38);
+  --text-sub:         rgba(15,40,80,0.88);
+  --text-muted:       rgba(20,50,90,0.75);
+  --text-faint:       rgba(30,58,100,0.60);
 
   --accent:           #0284c7;
   --accent-blue:      #0369a1;
@@ -94,17 +94,17 @@ html.light {
   --footer-card-bg:   linear-gradient(135deg,rgba(2,132,199,0.08),rgba(14,116,144,0.05));
   --footer-card-border: rgba(14,116,144,0.16);
 
-  --sidebar-nav-text:       rgba(30,58,100,0.65);
+  --sidebar-nav-text:       rgba(15,40,80,0.80);
   --sidebar-nav-text-hover: #0c1a2e;
   --sidebar-nav-text-active:#031830;
-  --sidebar-desc-inactive:  rgba(30,58,100,0.40);
-  --sidebar-icon-inactive:  rgba(14,116,144,0.55);
+  --sidebar-desc-inactive:  rgba(20,50,90,0.65);
+  --sidebar-icon-inactive:  rgba(14,116,144,0.75);
   --sidebar-hover-bg:       rgba(14,116,144,0.06);
   --sidebar-status-bg:      linear-gradient(135deg,rgba(14,116,144,0.09),rgba(2,132,199,0.06));
   --sidebar-status-border:  rgba(14,116,144,0.16);
-  --sidebar-status-text:    rgba(30,58,100,0.45);
-  --sidebar-brand-text-sub: rgba(30,58,100,0.45);
-  --sidebar-section-label:  rgba(2,132,199,0.60);
+  --sidebar-status-text:    rgba(15,40,80,0.65);
+  --sidebar-brand-text-sub: rgba(15,40,80,0.60);
+  --sidebar-section-label:  rgba(2,132,199,0.80);
 }
 
 /* ══════════════════════════════════════════
@@ -294,3 +294,38 @@ html.light .theme-heading {
 .hover\:theme-text:hover {
   color: var(--text);
 }
+
+/* ══════════════════════════════════════════
+   SMALL TEXT LEGIBILITY — global fixes
+   Targets tiny mono labels, tags, meta text
+   that use inline opacity/color styles.
+══════════════════════════════════════════ */
+
+/* Boost all very small text globally so nothing drops below readable contrast */
+html.dark *  { -webkit-font-smoothing: antialiased; }
+html.light * { -webkit-font-smoothing: auto; }
+
+/* Any element with font-size under ~11px that uses the muted palette
+   gets a legibility nudge via the variable itself (already boosted above).
+   These rules add a minimum contrast floor for common patterns. */
+
+/* Monospace labels & tags used across lab pages */
+html.dark  span[style*="JetBrains"],
+html.dark  div[style*="JetBrains"],
+html.dark  code { color: var(--text-muted); }
+
+html.light span[style*="JetBrains"],
+html.light div[style*="JetBrains"],
+html.light code { color: var(--text-sub); }
+
+/* theme-muted and theme-sub minimum contrast override */
+html.dark  .theme-muted { color: rgba(186,200,220,0.82); }
+html.light .theme-muted { color: rgba(15,40,80,0.76); }
+html.dark  .theme-sub   { color: rgba(203,213,225,0.90); }
+html.light .theme-sub   { color: rgba(15,40,80,0.88); }
+
+/* Sidebar description lines (small grey sub-labels under nav items) */
+html.dark  [style*="sidebar-desc-inactive"],
+html.dark  [style*="text-faint"] { color: rgba(148,163,184,0.72); }
+html.light [style*="sidebar-desc-inactive"],
+html.light [style*="text-faint"] { color: rgba(20,50,90,0.62); }

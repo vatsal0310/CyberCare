@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Shield, LogOut, Search, GitBranch, FlaskConical, Activity, Bug, Zap } from "lucide-react";
+import { Shield, LogOut, Search, GitBranch, FlaskConical, Activity, Bug, Zap, Map } from "lucide-react";
 import TechLayout from "../layouts/TechLayout";
 import TechToolCard from "../components/tech/TechToolCard";
 import SecurityLabsCard from "../components/tech/SecurityLabsCard";
@@ -10,11 +10,12 @@ import AlertsPanel from "../components/tech/AlertsPanel";
 const TOOL_CARDS = [
   { id: "vuln",   icon: Search,    label: "Smart Vulnerability Analyzer", desc: "Scan domains for open ports, header misconfigs, and known CVEs using a real Kali Linux container. Get an AI-powered security scorecard.", accent: "#38bdf8", tags: ["Port Scan", "Headers", "CVE"],        detail: [{ k: "Engine", v: "Kali Linux" }, { k: "Avg scan", v: "~30s"      }] },
   { id: "attack", icon: GitBranch, label: "Attack Graph Engine",           desc: "Visually design your system architecture, auto-discover every attack path via BFS/DFS. Maps threats to MITRE ATT&CK and scores risk via STRIDE.", accent: "#818cf8", tags: ["MITRE", "STRIDE", "Graph"],    detail: [{ k: "DB",     v: "Postgres"   }, { k: "Export",  v: "PDF / JSON" }] },
+  { id: "guided", icon: Map,       label: "Guided Workflow",              desc: "Follow the PTES penetration testing methodology step-by-step. Perform recon, scanning, enumeration, vulnerability analysis and reporting in a simulated lab.", accent: "#34d399", tags: ["PTES", "Guided", "Pentest"], detail: [{ k: "Format", v: "Step-by-step" }, { k: "Est.",    v: "4 Hours" }] },
   { id: "soc",    icon: Shield,    label: "SOC / Red-Blue Team Lab",       desc: "Launch SQL injections, XSS payloads and brute force as Red Team — detect and neutralise them as a Blue Team SOC analyst with live SIEM feed.", accent: "#f472b6", tags: ["Red Team", "Blue Team", "SIEM"], detail: [{ k: "Mode",   v: "Live Sim"   }, { k: "Feed",    v: "Real-time"  }] },
 ];
 
 const STATS = [
-  { label: "Tools Available", value: 5,   icon: FlaskConical, color: "#38bdf8" },
+  { label: "Tools Available", value: 6,   icon: FlaskConical, color: "#38bdf8" },
   { label: "Scans Run",       value: 142, icon: Activity,     color: "#818cf8" },
   { label: "Vulns Found",     value: 31,  icon: Bug,          color: "#fb923c" },
   { label: "Lab Sessions",    value: 8,   icon: Zap,          color: "#34d399" },
@@ -25,7 +26,11 @@ function Counter({ target }) {
   useEffect(() => {
     let n = 0;
     const step = Math.ceil(target / 60);
-    const t = setInterval(() => { n += step; if (n >= target) { setCount(target); clearInterval(t); } else setCount(n); }, 16);
+    const t = setInterval(() => {
+      n += step;
+      if (n >= target) { setCount(target); clearInterval(t); }
+      else setCount(n);
+    }, 16);
     return () => clearInterval(t);
   }, [target]);
   return <>{count}</>;
@@ -33,9 +38,7 @@ function Counter({ target }) {
 
 export default function TechDashboard() {
   const navigate = useNavigate();
-  const [activeTool, setActiveTool] = useState(null);
 
-  // ── Real user from JWT stored in localStorage ──────────────
   const user     = JSON.parse(localStorage.getItem("cybercare_user") || "{}");
   const username = user.username || "Tech User";
   const initials = username.slice(0, 2).toUpperCase();
@@ -43,12 +46,16 @@ export default function TechDashboard() {
   const handleLaunch = (id) => {
     const routes = {
       vuln:     "/technical-user/vulnerability-analyzer",
+      guided:   "/technical-user/guided-workflow",
       attack:   "/technical-user/attack-graph",
       soc:      "/technical-user/soc-lab",
       sqli:     "/technical-user/sqli-lab",
       pwdcrack: "/technical-user/password-lab",
+      security: "/technical-user/security-labs",
     };
-    if (routes[id]) navigate(routes[id]);
+    // Support both a route key ("vuln") and a direct path ("/technical-user/...")
+    const destination = routes[id] ?? (id.startsWith("/") ? id : null);
+    if (destination) navigate(destination);
   };
 
   const handleLogout = () => {
@@ -57,8 +64,9 @@ export default function TechDashboard() {
     navigate("/");
   };
 
+  // ✅ Single <TechLayout> — only onLogout, no activeTool or onSelect
   return (
-    <TechLayout activeTool={activeTool} onSelect={setActiveTool} onLogout={handleLogout}>
+    <TechLayout onLogout={handleLogout}>
 
       {/* Top bar */}
       <div className="flex items-center justify-between mb-12">
@@ -75,7 +83,7 @@ export default function TechDashboard() {
         </div>
 
         <div className="flex items-center gap-4">
-          {/* User card with real name + initials from JWT */}
+          {/* User card */}
           <div
             className="flex items-center gap-3 px-4 py-2.5 rounded-xl theme-card"
             style={{ border: "1px solid var(--border)" }}

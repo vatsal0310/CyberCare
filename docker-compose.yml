@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
 
-  # ── Postgres 15 Alpine ─────────────────────────────────────────────
+  # ── Postgres for CyberCare ──────────────────────────────────────────
   db:
     image: postgres:15-alpine
     container_name: cybercare-db
@@ -23,7 +23,23 @@ services:
     networks:
       - cybercare-net
 
-  # ── Kali Linux ────────────────────────────────────────────────────
+  # ── Postgres for SQLi Lab (unchanged) ──────────────────────────────
+  sqli_db:
+    image: postgres:15-alpine
+    container_name: sqli_lab_db
+    environment:
+      POSTGRES_USER: lab_user
+      POSTGRES_PASSWORD: lab_password
+      POSTGRES_DB: sqli_lab
+    ports:
+      - "5433:5432"
+    networks:
+      - cybercare-net
+
+  # pcl_db removed — PCL tables now live in the main cybercare DB.
+  # This eliminates cross-database FK violations entirely.
+
+  # ── Kali for Smart Analyzer (always running) ────────────────────────
   cybercare-kali:
     image: kalilinux/kali-rolling
     container_name: cybercare-kali
@@ -38,7 +54,7 @@ services:
     networks:
       - cybercare-net
 
-  # ── Unified FastAPI Backend ────────────────────────────────────────
+  # ── Unified FastAPI Backend ─────────────────────────────────────────
   backend:
     build:
       context: ./backend
@@ -48,10 +64,14 @@ services:
     environment:
       PORT: 8000
       DATABASE_URL: postgresql://cybercare:cybercare123@db:5432/cybercare
+      SQLI_DATABASE_URL: postgresql://lab_user:lab_password@sqli_db:5432/sqli_lab
+      PCL_DATABASE_URL: postgresql://cybercare:cybercare123@db:5432/cybercare
       KALI_CONTAINER_NAME: cybercare-kali
-      # Generate with: python -c "import secrets; print(secrets.token_hex(32))"
+      LAB_IMAGE_NAME: lab_runtime
       SECRET_KEY: e480d2405f8ccbc849281d3ca2c96da808cf9505a9d1f253bf414639f78048a2
       ACCESS_TOKEN_EXPIRE_MINUTES: 180
+      SQLI_SECRET_KEY: 8c193135a62706ab713b026f41db24df9b6e163b7a2938766e3db6c1a013765f
+      WORDLIST_DIR: /app
     ports:
       - "8000:8000"
     volumes:

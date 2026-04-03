@@ -244,7 +244,7 @@ export default function Home() {
         </div>
 
         {/* FEATURES GRID */}
-        <div className="mb-24">
+        <div id="features" className="mb-24">
           <div className="text-center mb-12">
             <span style={{ fontFamily:"'JetBrains Mono',monospace", fontSize:".65rem", letterSpacing:".15em", color:"rgba(var(--accent-rgb),0.6)" }}>// PLATFORM CAPABILITIES</span>
             <h2 className="text-3xl font-extrabold mt-3" style={{ color:"var(--text)" }}>Comprehensive Security Platform</h2>
@@ -265,6 +265,82 @@ export default function Home() {
                 </div>
                 <h4 className="font-bold mb-1" style={{ color:"var(--text)" }}>{title}</h4>
                 <p className="text-xs" style={{ color:"var(--text-muted)" }}>{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ABOUT */}
+        <div id="about" className="mb-24 scroll-mt-20">
+          <div className="text-center mb-12">
+            <span style={{ fontFamily:"'JetBrains Mono',monospace", fontSize:".65rem", letterSpacing:".15em", color:"rgba(var(--accent-rgb),0.6)" }}>// ABOUT US</span>
+            <h2 className="text-3xl font-extrabold mt-3" style={{ color:"var(--text)" }}>Built for everyone. Trusted by security pros.</h2>
+            <p className="text-sm mt-2 max-w-xl mx-auto" style={{ color:"var(--text-muted)" }}>CyberCare was founded with a single mission — make cybersecurity knowledge accessible to all, regardless of technical background.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              { title:"Our Mission", body:"We bridge the gap between complex security concepts and everyday users. From students to senior engineers, CyberCare gives everyone the tools to stay safe online." },
+              { title:"Our Platform", body:"CyberCare combines education, real-time scanning tools, and hands-on penetration testing labs into one unified platform — no installs, no sign-ups for basic tools." },
+              { title:"Open & Private", body:"Your data never leaves your device for client-side tools. We believe privacy is a right, not a feature. No tracking, no ads, no selling your information." },
+            ].map(({ title, body }) => (
+              <div key={title} className="rounded-2xl p-6 transition-all duration-300 theme-stat-card"
+                style={{ border:"1px solid var(--border)" }}
+                onMouseEnter={e=>{ e.currentTarget.style.borderColor="var(--border-hover)"; e.currentTarget.style.transform="translateY(-3px)" }}
+                onMouseLeave={e=>{ e.currentTarget.style.borderColor="var(--border)"; e.currentTarget.style.transform="translateY(0)" }}>
+                <h4 className="font-bold mb-3 text-base" style={{ color:"var(--text)" }}>{title}</h4>
+                <p className="text-sm leading-relaxed" style={{ color:"var(--text-muted)" }}>{body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* LEGAL */}
+        <div id="legal" className="mb-24 scroll-mt-20">
+          <div className="text-center mb-12">
+            <span style={{ fontFamily:"'JetBrains Mono',monospace", fontSize:".65rem", letterSpacing:".15em", color:"rgba(var(--accent-rgb),0.6)" }}>// LEGAL</span>
+            <h2 className="text-3xl font-extrabold mt-3" style={{ color:"var(--text)" }}>Transparency & Terms</h2>
+            <p className="text-sm mt-2 max-w-xl mx-auto" style={{ color:"var(--text-muted)" }}>We keep our policies simple and honest. Here's what you need to know.</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            {[
+              { label:"01", title:"Terms of Use", body:"CyberCare is an educational platform. All penetration testing tools are intended for use on systems you own or have explicit written permission to test. Unauthorized use against third-party systems is strictly prohibited and may be illegal." },
+              { label:"02", title:"Privacy Policy", body:"For client-side tools (Password Analyzer, URL Checker, etc.), all processing happens locally in your browser. No data is transmitted to our servers. For tools that require API calls, only the minimum necessary data is sent and is never stored or shared." },
+              { label:"03", title:"Responsible Disclosure", body:"If you discover a vulnerability in our platform, please disclose it responsibly by contacting our security team. We appreciate the security community's efforts to keep CyberCare safe for all users." },
+              { label:"04", title:"Disclaimer", body:"Results from CyberCare tools are informational only and do not constitute professional legal or security advice. Always consult a qualified cybersecurity professional for critical decisions involving your infrastructure." },
+            ].map(({ label, title, body }) => (
+              <div key={title} className="rounded-2xl p-6 relative transition-all duration-300 theme-stat-card"
+                style={{ border:"1px solid var(--border)" }}
+                onMouseEnter={e=>{ e.currentTarget.style.borderColor="var(--border-hover)"; e.currentTarget.style.transform="translateY(-3px)" }}
+                onMouseLeave={e=>{ e.currentTarget.style.borderColor="var(--border)"; e.currentTarget.style.transform="translateY(0)" }}>
+                <div className="absolute top-4 right-5" style={{ fontFamily:"'JetBrains Mono',monospace", fontSize:".6rem", color:"rgba(var(--accent-rgb),0.15)" }}>{label}</div>
+                <h4 className="font-bold mb-3 text-base" style={{ color:"var(--text)" }}>{title}</h4>
+                <p className="text-sm leading-relaxed" style={{ color:"var(--text-muted)" }}>{body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* CONTACT */}
+        <div id="contact" className="mb-24 scroll-mt-20">
+          <div className="text-center mb-12">
+            <span style={{ fontFamily:"'JetBrains Mono',monospace", fontSize:".65rem", letterSpacing:".15em", color:"rgba(var(--accent-rgb),0.6)" }}>// CONTACT</span>
+            <h2 className="text-3xl font-extrabold mt-3" style={{ color:"var(--text)" }}>Get in Touch</h2>
+            <p className="text-sm mt-2 max-w-xl mx-auto" style={{ color:"var(--text-muted)" }}>Have a question, feedback, or want to collaborate? We'd love to hear from you.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
+            {[
+              { icon:"✉️", title:"General Enquiries", value:"hello@cybercare.app", sub:"For general questions and feedback" },
+              { icon:"🔐", title:"Security Reports", value:"security@cybercare.app", sub:"Responsible vulnerability disclosure" },
+              { icon:"🤝", title:"Partnerships", value:"partners@cybercare.app", sub:"Collaborations & institutional access" },
+            ].map(({ icon, title, value, sub }) => (
+              <div key={title} className="rounded-2xl p-6 text-center transition-all duration-300 theme-stat-card"
+                style={{ border:"1px solid var(--border)" }}
+                onMouseEnter={e=>{ e.currentTarget.style.borderColor="var(--border-hover)"; e.currentTarget.style.transform="translateY(-3px)" }}
+                onMouseLeave={e=>{ e.currentTarget.style.borderColor="var(--border)"; e.currentTarget.style.transform="translateY(0)" }}>
+                <div className="text-2xl mb-3">{icon}</div>
+                <h4 className="font-bold mb-1 text-sm" style={{ color:"var(--text)" }}>{title}</h4>
+                <p className="text-xs font-mono mb-1" style={{ color:"var(--accent)" }}>{value}</p>
+                <p className="text-xs" style={{ color:"var(--text-muted)" }}>{sub}</p>
               </div>
             ))}
           </div>

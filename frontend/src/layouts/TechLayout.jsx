@@ -1,48 +1,54 @@
-import { useNavigate, useLocation } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
-import ToolSidebar from "../components/tech/TechSidebar";
+import { useNavigate } from "react-router-dom";
+import TechSidebar from "../components/tech/TechSidebar";
 
-// Map each /tools/* path to a readable page name
-const ROUTE_LABELS = {
-  "/tools/password-analyzer":     "Password Analyzer",
-  "/tools/fake-website-detector": "Fake Website Detector",
-  "/tools/data-breach":           "Data Breach Checker",
-  "/tools/phishing-awareness":    "Phishing Awareness",
-  "/tools/spam-detection":        "Email Spam Detector",
-  "/tools/quiz":                  "Cyber Safety Quiz",
-};
+const FONT = "'JetBrains Mono', monospace";
 
-export default function ToolLayout({ children }) {
-  const navigate  = useNavigate();
-  const location  = useLocation();
-
-  // Only show breadcrumb when we're inside a specific tool (not the dashboard)
-  const currentLabel = ROUTE_LABELS[location.pathname];
-  const showBreadcrumb = Boolean(currentLabel);
+export default function TechLayout({ children, onLogout, breadcrumb }) {
+  const navigate = useNavigate();
 
   return (
-    <div className="flex min-h-screen theme-main-area" style={{ color: "var(--text)" }}>
-      <ToolSidebar />
-      <main className="flex-1 p-10 overflow-y-auto theme-main-area">
+    <div
+      className="flex min-h-screen theme-main-area"
+      style={{ color: "var(--text)" }}
+    >
+      {/* Grid background */}
+      <div className="fixed inset-0 pointer-events-none theme-grid-bg" style={{ zIndex: 0 }} />
 
-        {/* ── Breadcrumb ── only shown inside a tool page */}
-        {showBreadcrumb && (
+      {/* Sidebar — self-routing via useLocation, no props needed */}
+      <TechSidebar onLogout={onLogout} />
+
+      {/* Main content area */}
+      <main
+        className="relative flex-1 p-10 overflow-y-auto theme-main-area"
+        style={{ zIndex: 1, color: "var(--text)" }}
+      >
+        {/* Breadcrumb — shown only when the `breadcrumb` prop is passed */}
+        {breadcrumb && (
           <div
-            className="flex items-center gap-2 mb-8 text-xs"
-            style={{ color: "var(--text-muted)", fontFamily: "'JetBrains Mono', monospace" }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              marginBottom: 28,
+              fontFamily: FONT,
+              fontSize: 13,
+            }}
           >
             <span
-              className="cursor-pointer transition-colors duration-150"
-              onClick={() => navigate("/regular-user")}
-              onMouseEnter={e => e.currentTarget.style.color = "var(--text)"}
-              onMouseLeave={e => e.currentTarget.style.color = "var(--text-muted)"}
+              onClick={() => navigate("/technical-user")}
+              style={{
+                color: "#4b5563",
+                cursor: "pointer",
+                transition: "color 0.15s",
+                fontWeight: 500,
+              }}
+              onMouseEnter={e => (e.target.style.color = "var(--accent)")}
+              onMouseLeave={e => (e.target.style.color = "#4b5563")}
             >
               Dashboard
             </span>
-            <ChevronRight size={12} style={{ flexShrink: 0, opacity: 0.5 }} />
-            <span style={{ color: "var(--accent)" }}>
-              {currentLabel}
-            </span>
+            <span style={{ color: "#9ca3af" }}>›</span>
+            <span style={{ color: "var(--accent)", fontWeight: 600 }}>{breadcrumb}</span>
           </div>
         )}
 

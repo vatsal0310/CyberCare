@@ -37,3 +37,21 @@ export const analyzePassword = async (password) => {
     clearTimeout(timeout);
   }
 };
+
+// 👉 ADDED THIS: The api object for the Guided Workflow components
+export const api = {
+  get: async (endpoint) => {
+    const response = await fetch(`${BASE_URL}${endpoint}`);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return { data: await response.json() };
+  },
+  post: async (endpoint, body) => {
+    const response = await fetch(`${BASE_URL}${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return { data: await response.json() };
+  }
+};
